@@ -1,0 +1,33 @@
+# 触发测试用例集
+# 用于验证 ball-perception skill 的触发准确性
+
+should_trigger:
+  - "帮我搭建一个羽毛球检测的感知流水线"
+  - "用 YOLO 检测乒乓球并做 3D 跟踪"
+  - "实现球类感知的四模块流水线"
+  - "对这段网球视频做球检测和轨迹跟踪"
+  - "用 Kalman 滤波平滑球的 2D 轨迹"
+  - "双目相机三角化重建球的 3D 位置"
+  - "ball perception pipeline for table tennis"
+  - "shuttle detection and tracking"
+  - "做羽毛球轨迹的 3D 重建"
+  - "配置感知系统的相机内参和外参"
+
+should_not_trigger:
+  - "帮我写一个排序算法"
+  - "用 YOLO 检测行人"
+  - "解释这段 Python 代码"
+  - "做图像语义分割"
+  - "训练一个图像分类模型"
+  - "帮我 review 这个 PR"
+  - "生成一份财务报销单"
+  - "部署一个 web 服务"
+  - "写一个数据库迁移脚本"
+  - "分析这段日志的错误原因"
+
+edge_cases:
+  - "检测视频里的球"  # 模糊，可能是足球/篮球，应触发
+  - "track the ball"   # 英文，应触发
+  - "做目标检测"       # 太泛，不应触发
+  - "乒乓球机器人"     # 可能触发，需结合上下文
+  - "3D reconstruction from stereo cameras"  # 可能触发，需判断是否球类

@@ -1,0 +1,75 @@
+# Ball Perception Pipeline Configuration
+# ========================================
+
+# --- Detector Settings ---
+detector:
+  type: "yolo"           # "yolo" or "hsv"
+  model_path: "yolov8n.pt"
+  input_size: 1024
+  confidence_threshold: 0.25
+  max_det: 1
+  device: "cpu"          # "cpu", "cuda:0", etc.
+
+  # HSV detector settings (used when type="hsv")
+  hsv:
+    lower: [30, 50, 50]   # Lower HSV bound for shuttlecock/ball color
+    upper: [90, 255, 255] # Upper HSV bound
+    min_area: 10
+    max_area: 5000
+
+# --- Tracker Settings ---
+tracker:
+  window_size: 5          # Sliding window for temporal smoothing
+  max_gap: 3              # Max consecutive missing detections before reset
+  max_velocity: 500.0     # Max allowed pixel velocity (reject outliers)
+  use_prediction: true    # Predict next position when detection missing
+
+# --- Kalman Filter Settings ---
+filter:
+  dt: 0.008               # Time step (1/125 Hz for DeepMind-style systems)
+  dim: 2                  # State dimension (2 for 2D, 3 for 3D)
+  model: "CV"             # "CV" (constant velocity) or "CA" (constant acceleration)
+  process_noise: 1.0      # Q matrix scaling
+  measurement_noise: 10.0 # R matrix scaling
+  process_noise_3d: 0.5   # Q scaling for 3D filter
+  measurement_noise_3d: 5.0  # R scaling for 3D filter
+
+# --- Geometry / Triangulation Settings ---
+geometry:
+  method: "DLT"           # "DLT" or "midpoint"
+  T_cam_to_world:         # 4x4 transform from camera to world frame
+    - [1, 0, 0, 0]
+    - [0, 1, 0, 0]
+    - [0, 0, 1, 0]
+    - [0, 0, 0, 1]
+
+# --- Camera Configurations ---
+# Example: Two-camera stereo setup (like DeepMind table tennis)
+cameras:
+  - id: "cam0"
+    width: 1280
+    height: 1024
+    K:                    # 3x3 intrinsic matrix
+      - [800, 0, 640]
+      - [0, 800, 512]
+      - [0, 0, 1]
+    dist_coeffs: [0, 0, 0, 0, 0]
+    R:                    # 3x3 rotation matrix (camera to world)
+      - [1, 0, 0]
+      - [0, 1, 0]
+      - [0, 0, 1]
+    t: [0, 0, 0]          # 3x1 translation vector
+
+  - id: "cam1"
+    width: 1280
+    height: 1024
+    K:
+      - [800, 0, 640]
+      - [0, 800, 512]
+      - [0, 0, 1]
+    dist_coeffs: [0, 0, 0, 0, 0]
+    R:
+      - [1, 0, 0]
+      - [0, 1, 0]
+      - [0, 0, 1]
+    t: [2.74, 0, 0]       # 2.74m baseline (table tennis table width)

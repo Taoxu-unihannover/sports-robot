@@ -1,0 +1,84 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sports-robot"
+version = "1.0.0"
+description = "SportsRobot — 球类机器人技术栈。以 Marketplace + Plugin + Agent 架构构建乒乓球、羽毛球、网球机器人全技术栈。"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+authors = [
+    {name = "SportsRobot Contributors"}
+]
+keywords = [
+    "sports-robot",
+    "ball-perception",
+    "table-tennis",
+    "badminton",
+    "tennis",
+    "kalman-filter",
+    "triangulation",
+    "reinforcement-learning",
+    "robotics",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy>=1.21.0",
+    "pyyaml>=5.4.0",
+]
+
+[project.optional-dependencies]
+vision = [
+    "opencv-python>=4.5.0",
+]
+detection = [
+    "ultralytics>=8.0.0",
+    "torch>=1.10.0",
+]
+inference = [
+    "onnxruntime>=1.10.0",
+]
+full = [
+    "sports-robot[vision,detection,inference]",
+]
+dev = [
+    "pytest>=7.0",
+    "sports-robot[full]",
+]
+
+[project.urls]
+Homepage = "https://github.com/Taoxu-unihannover/sports-robot"
+Repository = "https://github.com/Taoxu-unihannover/sports-robot.git"
+Issues = "https://github.com/Taoxu-unihannover/sports-robot/issues"
+
+[tool.setuptools]
+packages = []
+
+[tool.pytest.ini_options]
+testpaths = [
+    "skills/ball-detector/tests",
+    "skills/ball-tracker/tests",
+    "skills/ball-filter/tests",
+    "skills/ball-geometry/tests",
+    "plugins/ball-perception/tests",
+]
+pythonpath = [
+    "skills/ball-detector/scripts",
+    "skills/ball-tracker/scripts",
+    "skills/ball-filter/scripts",
+    "skills/ball-geometry/scripts",
+    "plugins/ball-perception/scripts",
+]
