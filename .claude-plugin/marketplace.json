@@ -1,0 +1,106 @@
+{
+  "name": "sports-robot",
+  "owner": {
+    "name": "SportsRobot",
+    "url": "https://github.com/Taoxu-unihannover/sports-robot"
+  },
+  "plugins": [
+    {
+      "name": "ball-perception-skills",
+      "description": "球类感知五模块 Skills（5 个）。单帧检测、短轨迹跟踪、Kalman 滤波、3D 几何重建、旋转估计，覆盖乒乓球/羽毛球/网球感知全流程。",
+      "source": "./skills",
+      "strict": false,
+      "version": "2.0.0",
+      "author": {
+        "name": "SportsRobot"
+      },
+      "keywords": [
+        "ball",
+        "perception",
+        "detection",
+        "tracking",
+        "kalman-filter",
+        "triangulation",
+        "spin",
+        "rotation",
+        "magnus",
+        "event-camera",
+        "sports"
+      ],
+      "category": "skills",
+      "skills": [
+        {
+          "name": "ball-detector",
+          "path": "./ball-detector",
+          "recipes": [
+            "./ball-detector/recipes/eth-shuttle-detection",
+            "./ball-detector/recipes/hsv-quickstart"
+          ]
+        },
+        "./ball-tracker",
+        {
+          "name": "ball-state-estimator",
+          "path": "./ball-state-estimator",
+          "recipes": [
+            "./ball-state-estimator/recipes/deepmind-cv-kf",
+            "./ball-state-estimator/recipes/eth-ekf-badminton",
+            "./ball-state-estimator/recipes/latent-sliding-window"
+          ]
+        },
+        {
+          "name": "ball-geometry",
+          "path": "./ball-geometry",
+          "recipes": [
+            "./ball-geometry/recipes/deepmind-dlt-triangulation",
+            "./ball-geometry/recipes/ace-multi-camera-dlt",
+            "./ball-geometry/recipes/eth-stereo-depth"
+          ]
+        },
+        {
+          "name": "ball-spin-estimator",
+          "path": "./ball-spin-estimator",
+          "recipes": [
+            "./ball-spin-estimator/recipes/event-camera-spin",
+            "./ball-spin-estimator/recipes/spindoe-marker-pose",
+            "./ball-spin-estimator/recipes/trajectory-magnus-spin"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ball-perception",
+      "description": "球类感知端到端开发 Team。含完整工作流（标定→检测→跟踪→滤波→重建→旋转估计）、3 个专业 Agent 和工程模板。适用于乒乓球、羽毛球、网球等球类运动的感知系统搭建。",
+      "source": "./plugins/ball-perception",
+      "version": "2.0.0",
+      "author": {
+        "name": "SportsRobot"
+      },
+      "keywords": [
+        "ball",
+        "perception",
+        "pipeline",
+        "detection",
+        "tracking",
+        "kalman",
+        "triangulation",
+        "spin",
+        "rotation",
+        "magnus",
+        "event-camera",
+        "sports-robot"
+      ],
+      "category": "development",
+      "dependencies": [
+        "ball-perception-skills"
+      ],
+      "agents": [
+        "./agents/perception-architect.md",
+        "./agents/perception-developer.md",
+        "./agents/perception-reviewer.md"
+      ],
+      "recipes": [
+        "./recipes/eth-badminton-perception"
+      ]
+    }
+  ]
+}

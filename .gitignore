@@ -20,7 +20,7 @@ env/
 *~
 
 # AI tools
-.claude-plugin/
+# .claude-plugin/ contains marketplace.json which must be tracked
 
 # Testing
 .pytest_cache/
