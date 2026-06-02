@@ -37,7 +37,11 @@
             "./ball-detector/recipes/hsv-quickstart"
           ]
         },
-        "./ball-tracker",
+        {
+          "name": "ball-tracker",
+          "path": "./ball-tracker",
+          "recipes": []
+        },
         {
           "name": "ball-state-estimator",
           "path": "./ball-state-estimator",
