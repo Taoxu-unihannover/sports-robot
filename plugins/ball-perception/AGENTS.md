@@ -1,6 +1,6 @@
 # Ball Perception — 球类感知开发 Team
 
-> 端到端球类感知系统开发环境。含 4 个专业 Skill、3 个 Agent、完整工作流。
+> 端到端球类感知系统开发环境。含 5 个专业 Skill、3 个 Agent、完整工作流。
 
 ## 架构概览
 
@@ -25,14 +25,15 @@ ball-perception/
         └── plan-template.md
 ```
 
-## 四模块 Skills
+## 五模块 Skills
 
 | Skill | 职责 | 输入 | 输出 |
 |-------|------|------|------|
 | `ball-detector` | 单帧球体检测 | BGR 图像 | 2D 球心坐标 + 置信度 |
 | `ball-tracker` | 短轨迹时序平滑 | 连续帧 2D 坐标 | 去噪 2D 轨迹 |
-| `ball-filter` | Kalman 状态估计 | 含噪 2D/3D 观测 | 平滑状态 + 速度/加速度 |
+| `ball-state-estimator` | Kalman 状态估计 | 含噪 2D/3D 观测 | 平滑状态 + 速度/加速度 |
 | `ball-geometry` | 3D 几何重建 | 多视角 2D 坐标 + 投影矩阵 | 3D 位置 + 重投影误差 |
+| `ball-spin-estimator` | 旋转（角速度）估计 | 事件流/标记点/3D 轨迹 | 三维角速度 + 置信度 |
 
 ## 三 Agent 分工
 
@@ -77,6 +78,7 @@ pip install -r requirements.txt
 # 运行回归测试
 cd skills/ball-detector && python scripts/detector.py --test
 cd skills/ball-tracker && python scripts/tracker.py --test
-cd skills/ball-filter && python scripts/filter.py --test
+cd skills/ball-state-estimator && python scripts/filter.py --test
 cd skills/ball-geometry && python scripts/geometry.py --test
+cd skills/ball-spin-estimator && python scripts/spin.py --test
 ```

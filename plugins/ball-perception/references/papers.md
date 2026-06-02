@@ -71,3 +71,40 @@
 | One-Shot Shuttle Detection | 20,510 | ETH RSL | See GitHub README |
 | Shuttlecock Trajectory Dataset | 55,563 | NYCU | Google Drive (see TrackNet repos) |
 | TrackNetV1 Dataset | ~18,000 | NYCU | Google Drive (see TrackNetV1 repo) |
+
+## Spin Estimation Papers
+
+### SpinDOE — Marker-based Spin Estimation (2024)
+- **Title**: SpinDOE: A Table Tennis Spin Estimation Dataset
+- **Paper**: https://arxiv.org/abs/2407.20624
+- **Key contributions**:
+  - CAD stencil for creating marked test balls with known dot patterns
+  - PnP-based pose estimation from consecutive frames
+  - Angular velocity from relative rotation: $\boldsymbol{\omega} = \theta \hat{\mathbf{n}} / \Delta t$
+  - Trajectory dataset with ground-truth spin labels
+  - Validation on real table tennis serves
+
+### Tübingen Event Camera Spin (2023)
+- **Title**: Event-based Angular Velocity Regression for Table Tennis Spin Estimation
+- **Key contributions**:
+  - Ordinal Time Surface encoding for event streams
+  - Event-based optical flow extraction from time surface gradients
+  - Angular velocity regression via $\mathbf{v}_{\text{flow}} = \boldsymbol{\omega} \times \mathbf{r}$ geometric constraint
+  - Microsecond-level temporal resolution for high-speed spin
+
+### Ace Event Camera Spin (2024)
+- **Title**: Ace: A Competitive Robot for Table Tennis
+- **Paper**: Project page at Sony AI
+- **Code**: https://github.com/SonyResearch/ace_public
+- **Key contributions** (spin-specific):
+  - 3 event cameras with gaze-control mirrors for spin estimation
+  - Low-latency CNN: event frames → angular velocity in ~2–3 ms
+  - High-precision CMax: Contrast Maximization framework for optimal spin parameters (~10 ms)
+  - Adaptive algorithm switching based on real-time confidence
+  - 400–700 Hz angular velocity estimation frequency
+
+### Magnus Effect Trajectory Analysis
+- **Physical basis**: $\mathbf{F}_{\text{Magnus}} = C_L \cdot \frac{4}{3}\pi r^3 \rho \cdot \boldsymbol{\omega} \times \mathbf{v}$
+- **Limitation**: Magnus acceleration typically < 1 m/s² (vs. gravity 9.8 m/s²), requiring high position precision
+- **Bounce analysis**: Spin causes tangential velocity change at bounce (topspin accelerates, backspin decelerates)
+- **Applicable systems**: Any multi-camera system with 3D trajectory reconstruction

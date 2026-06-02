@@ -1,7 +1,7 @@
 {
   "name": "ball-perception",
-  "version": "1.0.0",
-  "description": "球类感知端到端开发 Team。含完整工作流（标定→检测→跟踪→滤波→重建）、3 个专业 Agent 和工程模板。适用于乒乓球、羽毛球、网球等球类运动的感知系统搭建。",
+  "version": "2.0.0",
+  "description": "球类感知端到端开发 Team。含完整工作流（标定→检测→跟踪→滤波→重建→旋转估计）、3 个专业 Agent 和工程模板。适用于乒乓球、羽毛球、网球等球类运动的感知系统搭建。",
   "author": {
     "name": "SportsRobot"
   },
@@ -13,19 +13,27 @@
     "tracking",
     "kalman",
     "triangulation",
+    "spin",
+    "rotation",
+    "magnus",
+    "event-camera",
     "sports-robot"
   ],
   "category": "development",
   "skills": [
     "ball-detector",
     "ball-tracker",
-    "ball-filter",
-    "ball-geometry"
+    "ball-state-estimator",
+    "ball-geometry",
+    "ball-spin-estimator"
   ],
   "agents": [
     "./agents/perception-architect.md",
     "./agents/perception-developer.md",
     "./agents/perception-reviewer.md"
+  ],
+  "recipes": [
+    "./recipes/eth-badminton-perception"
   ],
   "dependencies": {
     "python": ">=3.8",

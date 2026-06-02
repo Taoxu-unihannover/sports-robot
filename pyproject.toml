@@ -71,14 +71,16 @@ packages = []
 testpaths = [
     "skills/ball-detector/tests",
     "skills/ball-tracker/tests",
-    "skills/ball-filter/tests",
+    "skills/ball-state-estimator/tests",
     "skills/ball-geometry/tests",
+    "skills/ball-spin-estimator/tests",
     "plugins/ball-perception/tests",
 ]
 pythonpath = [
     "skills/ball-detector/scripts",
     "skills/ball-tracker/scripts",
-    "skills/ball-filter/scripts",
+    "skills/ball-state-estimator/scripts",
     "skills/ball-geometry/scripts",
+    "skills/ball-spin-estimator/scripts",
     "plugins/ball-perception/scripts",
 ]

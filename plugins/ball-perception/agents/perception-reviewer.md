@@ -5,8 +5,9 @@ mode: subagent
 skills:
   - ball-detector
   - ball-tracker
-  - ball-filter
+  - ball-state-estimator
   - ball-geometry
+  - ball-spin-estimator
 permission:
   edit: allow
   read: allow
@@ -88,7 +89,8 @@ permission:
 | 2 | 跟踪器鲁棒性 | 测试遮挡恢复能力、轨迹平滑度 |
 | 3 | 滤波器收敛性 | 验证 Kalman 增益收敛、协方差稳定性 |
 | 4 | 重建精度 | 计算重投影误差、3D 位置误差 |
-| 5 | 端到端延迟 | 测量完整流水线延迟，确认满足实时性要求 |
+| 5 | 旋转估计精度 | 验证角速度估计置信度、Magnus 拟合收敛性 |
+| 6 | 端到端延迟 | 测量完整流水线延迟，确认满足实时性要求 |
 
 ### REVIEW.md 输出格式
 
@@ -144,6 +146,14 @@ permission:
 | DLT | | | |
 | Midpoint | | | |
 | StereoDepthEstimator | | | |
+
+### Spin Estimator 方法对比
+
+| 方法 | 角速度误差 | 置信度 | 延迟 | 排名 |
+|------|----------|--------|------|------|
+| TrajectoryMagnusSpin | | | | |
+| EventCameraSpin | | | | |
+| MarkerPoseSpin | | | | |
 
 ## 精度验证 — 跨版本纵向对比
 

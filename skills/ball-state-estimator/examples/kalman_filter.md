@@ -7,7 +7,7 @@
 ## 代码
 
 ```python
-from skills.ball_filter.scripts.filter import BallKalmanFilter
+from skills.ball_state_estimator.scripts.filter import BallKalmanFilter
 
 kf = BallKalmanFilter(
     dt=0.008,          # 125Hz
@@ -51,7 +51,7 @@ kf = BallKalmanFilter(
 ## 示例：EKF（含空气阻力）
 
 ```python
-from skills.ball_filter.scripts.filter import ExtendedBallKalmanFilter
+from skills.ball_state_estimator.scripts.filter import ExtendedBallKalmanFilter
 
 ekf = ExtendedBallKalmanFilter(
     dt=0.008,

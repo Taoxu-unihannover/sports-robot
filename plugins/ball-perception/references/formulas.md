@@ -137,3 +137,94 @@ $$
 | Festo action | 64.5 | 11.5 |
 
 Total end-to-end latency modeled as sum of independent Gaussians.
+
+## 8. Magnus Effect (Spin Estimation)
+
+The Magnus force on a spinning sphere:
+
+$$
+\mathbf{F}_{\text{Magnus}} = C_L \cdot \frac{4}{3}\pi r^3 \rho \cdot \boldsymbol{\omega} \times \mathbf{v}
+$$
+
+where:
+- $C_L$ = lift coefficient
+- $r$ = ball radius
+- $\rho$ = air density
+- $\boldsymbol{\omega}$ = angular velocity vector
+- $\mathbf{v}$ = translational velocity
+
+The Magnus acceleration:
+
+$$
+\mathbf{a}_{\text{Magnus}} = \frac{C_L \cdot \frac{4}{3}\pi r^3 \rho}{m} \cdot \boldsymbol{\omega} \times \mathbf{v}
+$$
+
+For spin estimation from trajectory, the full flight model is:
+
+$$
+\mathbf{a} = \mathbf{g} + \mathbf{a}_{\text{drag}} + \mathbf{a}_{\text{Magnus}}
+$$
+
+where drag acceleration:
+
+$$
+\mathbf{a}_{\text{drag}} = -k_d \|\mathbf{v}\| \mathbf{v}, \quad k_d = \frac{C_D \rho A}{2m}
+$$
+
+Given measured trajectory $\{\mathbf{p}_i\}$, estimate acceleration via finite differences, subtract gravity and drag, then solve for $\boldsymbol{\omega}$ from the residual Magnus acceleration.
+
+## 9. Event Camera Optical Flow (Spin Estimation)
+
+Event camera outputs asynchronous events $(x, y, t, \text{polarity})$ when pixel brightness changes exceed a threshold.
+
+**Ordinal Time Surface**: Each pixel records the timestamp of the most recent event:
+
+$$
+T(x, y) = t_{\text{latest event at } (x, y)}
+$$
+
+**Event optical flow**: From the time surface gradient, compute the local optical flow:
+
+$$
+\mathbf{v}_{\text{flow}} = -\frac{\partial T / \partial t}{\|\nabla T\|^2} \nabla T
+$$
+
+**Angular velocity from flow**: For a sphere of radius $r$ at distance $\mathbf{r}$ from center:
+
+$$
+\mathbf{v}_{\text{flow}} = \boldsymbol{\omega} \times \mathbf{r}
+$$
+
+Solve for $\boldsymbol{\omega}$ via least squares over multiple surface points.
+
+## 10. Perspective-n-Point (Marker-based Spin Estimation)
+
+Given $n$ 2D-3D point correspondences $(\mathbf{u}_i, \mathbf{X}_i)$, solve for camera pose $(\mathbf{R}, \mathbf{t})$:
+
+$$
+\mathbf{u}_i \simeq \mathbf{K}[\mathbf{R} | \mathbf{t}]\mathbf{X}_i
+$$
+
+From consecutive poses $\mathbf{R}_t$ and $\mathbf{R}_{t+1}$, compute relative rotation:
+
+$$
+\Delta\mathbf{R} = \mathbf{R}_{t+1}\mathbf{R}_t^{-1}
+$$
+
+Convert to angular velocity via axis-angle representation:
+
+$$
+\boldsymbol{\omega} = \frac{\theta}{\Delta t} \hat{\mathbf{n}}
+$$
+
+where $\theta$ is the rotation angle and $\hat{\mathbf{n}}$ is the rotation axis of $\Delta\mathbf{R}$.
+
+## 11. Sliding Window Velocity Estimation (LATENT)
+
+$$
+\hat{\mathbf{v}}_t = \frac{1}{N-1} \sum_{i=1}^{N-1} \frac{\mathbf{p}_{t-i+1} - \mathbf{p}_{t-i}}{\Delta t}, \quad N=4
+$$
+
+Noise variance reduction: $\sigma_v^2$ reduced by factor $1/(N-1) = 1/3$ compared to single-frame differencing.
+
+Additional latency: $\approx (N-1)\Delta t / 2 \approx 30$ ms for $N=4$, $\Delta t = 20$ ms.

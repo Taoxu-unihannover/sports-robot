@@ -84,6 +84,19 @@ output_schema:
 }
 ```
 
+## 可用方案（Recipes）
+
+Skill 定义"能做什么"（推理能力），Recipe 定义"怎么做到"（从数据到部署的完整构建方案）。
+
+| Recipe | 适用球类 | 难度 | 需要训练 | 性能基准 |
+|--------|---------|------|---------|---------|
+| [eth-shuttle-detection](recipes/eth-shuttle-detection/RECIPE.md) | 羽毛球 | 高 | 是 | F1=0.86（相似场景）/ 0.70（未知场景） |
+| [hsv-quickstart](recipes/hsv-quickstart/RECIPE.md) | 乒乓球/网球 | 低 | 否 | < 2ms 延迟，依赖颜色标定 |
+
+选择建议：
+- 快速验证 → `hsv-quickstart`：无需 GPU，即开即用
+- 生产部署 → `eth-shuttle-detection`：需要 GPU + 训练数据，但精度和泛化能力远超 HSV
+
 ## 失败处理
 
 | 失败场景 | 检测方式 | 处理策略 |

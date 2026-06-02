@@ -5,8 +5,9 @@ mode: subagent
 skills:
   - ball-detector
   - ball-tracker
-  - ball-filter
+  - ball-state-estimator
   - ball-geometry
+  - ball-spin-estimator
 permission:
   edit: allow
   bash: allow
@@ -93,8 +94,13 @@ permission:
 - 单元测试：3D 精度、重投影误差
 - 验收标准：重投影误差 < 2 像素，3D 误差 < 5cm
 
-#### 阶段 5：流水线集成
-- 四模块串联，端到端测试
+#### 阶段 5：旋转估计实现
+- 实现 TrajectoryMagnusSpin / EventCameraSpin / MarkerPoseSpin
+- 单元测试：角速度估计精度、置信度评估
+- 验收标准：Magnus 方案可检测 > 5 rev/s 的旋转，置信度 > 0.5
+
+#### 阶段 6：流水线集成
+- 五模块串联，端到端测试
 - 性能 profiling，延迟优化
 - 验收标准：端到端延迟 < 20ms，检测率 > 90%
 

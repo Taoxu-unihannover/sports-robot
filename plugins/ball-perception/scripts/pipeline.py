@@ -1,11 +1,12 @@
 """
 Full Perception Pipeline
 
-Integrates all four modules:
+Integrates all five modules:
   Module 1: Detector  → 2D ball centers
   Module 2: Tracker   → smoothed 2D trajectory
   Module 3: Filter    → filtered state [p, v]
   Module 4: Geometry  → 3D position/velocity
+  Module 5: Spin      → angular velocity (wx, wy, wz)
 
 Usage:
   python pipeline.py --config ../assets/config.yaml
@@ -27,13 +28,15 @@ import yaml
 _SKILLS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "skills")
 sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-detector", "scripts"))
 sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-tracker", "scripts"))
-sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-filter", "scripts"))
+sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-state-estimator", "scripts"))
 sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-geometry", "scripts"))
+sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-spin-estimator", "scripts"))
 
 from detector import BallDetector, HSVColorDetector, DetectionResult
 from tracker import TrajectoryTracker, TrackPoint
 from filter import BallKalmanFilter, BallState
 from geometry import Triangulator, CameraConfig, CoordinateTransformer
+from spin import TrajectoryMagnusSpin
 
 
 class PerceptionPipeline:
@@ -45,9 +48,12 @@ class PerceptionPipeline:
         self._init_trackers()
         self._init_filters()
         self._init_geometry()
+        self._init_spin_estimator()
 
         self.frame_count = 0
         self.fps_history: List[float] = []
+        self.trajectory_3d: List[np.ndarray] = []
+        self.trajectory_timestamps: List[float] = []
 
     def _init_detectors(self):
         det_cfg = self.config.get("detector", {})
@@ -139,6 +145,19 @@ class PerceptionPipeline:
             T = np.array(T)
         self.transformer = CoordinateTransformer(T)
 
+    def _init_spin_estimator(self):
+        spin_cfg = self.config.get("spin_estimator", {})
+        self.spin_estimator = None
+        spin_method = spin_cfg.get("method", "trajectory_magnus")
+        if spin_method == "trajectory_magnus":
+            self.spin_estimator = TrajectoryMagnusSpin(
+                ball_radius=spin_cfg.get("ball_radius", 0.02),
+                air_density=spin_cfg.get("air_density", 1.225),
+                lift_coefficient=spin_cfg.get("lift_coefficient", 0.4),
+                dt=spin_cfg.get("dt", 0.008),
+            )
+        self.spin_result = None
+
     def process_frame(
         self, frames: Dict[str, np.ndarray], timestamp: Optional[float] = None
     ) -> Optional[BallState]:
@@ -183,8 +202,15 @@ class PerceptionPipeline:
             state_3d = self.filter_3d.update_3d(
                 point_world[0], point_world[1], point_world[2]
             )
+            self.trajectory_3d.append(point_world.copy())
+            self.trajectory_timestamps.append(timestamp)
         else:
             state_3d = self.filter_3d.predict()
+
+        if self.spin_estimator is not None and len(self.trajectory_3d) >= 5:
+            positions = np.array(self.trajectory_3d[-20:])
+            ts = np.array(self.trajectory_timestamps[-20:])
+            self.spin_result = self.spin_estimator.estimate(positions, ts)
 
         t_end = time.perf_counter()
         elapsed_ms = (t_end - t_start) * 1000.0
@@ -230,6 +256,12 @@ class PerceptionPipeline:
             text += f"V: ({state.vx:.2f}, {state.vy:.2f}, {state.vz:.2f})"
             cv2.putText(frame, text, (10, 30), cv2.FONT_HERSHEY_SIMPLEX,
                         0.6, (0, 255, 0), 2)
+
+        if self.spin_result is not None:
+            spin_text = f"Spin: ({self.spin_result.wx:.1f}, {self.spin_result.wy:.1f}, {self.spin_result.wz:.1f}) rad/s | "
+            spin_text += f"RPM: {self.spin_result.spin_rpm:.0f}"
+            cv2.putText(frame, spin_text, (10, 55), cv2.FONT_HERSHEY_SIMPLEX,
+                        0.6, (0, 200, 255), 2)
 
         if self.fps_history:
             avg_latency = np.mean(self.fps_history[-30:])

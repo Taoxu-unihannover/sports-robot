@@ -70,7 +70,7 @@ class ModuleClass:
 **数据流**：
 
 ```
-Image → Detector → (x, y, conf) → Tracker → (x_smooth, y_smooth) → Filter → BallState → Geometry → (X, Y, Z)
+Image → Detector → (x, y, conf) → Tracker → (x_smooth, y_smooth) → Filter → BallState → Geometry → (X, Y, Z) → SpinEstimator → (wx, wy, wz)
 ```
 
 **接口约定**：
@@ -80,7 +80,8 @@ Image → Detector → (x, y, conf) → Tracker → (x_smooth, y_smooth) → Fil
 | Detector → Tracker | `Optional[DetectionResult]` | — | 像素坐标 |
 | Tracker → Filter | `Optional[TrackPoint]` | — | 像素坐标 |
 | Filter → Geometry | `BallState` | — | 归一化坐标 |
-| Geometry → 外部 | `np.ndarray` | — | 世界坐标 (米) |
+| Geometry → SpinEstimator | `np.ndarray` | — | 世界坐标 (米) |
+| SpinEstimator → 外部 | `dict` | — | 世界坐标 (rad/s) |
 
 ---
 
@@ -114,6 +115,8 @@ Image → Detector → (x, y, conf) → Tracker → (x_smooth, y_smooth) → Fil
 | Filter | 速度 RMSE | < 50 px/s | 合成轨迹 + 噪声 |
 | Geometry | 重投影误差 | < 2 px | 标定板验证 |
 | Geometry | 3D 位置误差 | < 5 cm | 已知位置目标 |
+| SpinEstimator | 角速度置信度 | > 0.5 | 合成旋转轨迹 |
+| SpinEstimator | Magnus 可检测转速 | > 5 rev/s | 已知旋转数据 |
 
 ---
 
@@ -126,6 +129,7 @@ Image → Detector → (x, y, conf) → Tracker → (x_smooth, y_smooth) → Fil
 | Tracker | < 1 ms | update() 耗时 |
 | Filter | < 0.5 ms | predict + update 耗时 |
 | Geometry | < 1 ms | triangulate() 耗时 |
+| SpinEstimator (Magnus) | < 1 ms | estimate() 耗时 |
 | Pipeline (端到端) | < 20 ms | 单帧全流程耗时 |
 
 ---
@@ -163,4 +167,10 @@ filter:
 geometry:
   method: DLT  # DLT | midpoint
   max_reprojection_error: 5.0
+
+spin_estimator:
+  method: trajectory_magnus  # trajectory_magnus | event_camera | marker_pose
+  ball_radius: 0.02
+  air_density: 1.225
+  lift_coefficient: 0.4
 ```

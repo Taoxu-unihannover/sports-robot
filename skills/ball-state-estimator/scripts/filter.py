@@ -266,3 +266,104 @@ class ExtendedBallKalmanFilter:
         self.x = np.zeros(6)
         self.P = np.eye(6) * 100.0
         self.initialized = False
+
+
+class SlidingWindowVelocity:
+    """
+    Sliding window average velocity estimator.
+
+    Estimates velocity by averaging finite-difference velocities over
+    the last N frames. Noise variance is reduced by 1/(N-1) compared
+    to single-frame differencing, at the cost of ~((N-1)*dt/2) extra
+    latency and smoothing out real acceleration changes.
+
+    Reference: LATENT system (Tsinghua / Peking / Galbot, 2026)
+    """
+
+    def __init__(self, window_size: int = 4, dt: float = 1.0 / 50.0, dim: int = 3):
+        self.window_size = window_size
+        self.dt = dt
+        self.dim = dim
+        self.history: list = []
+
+    def update(self, position: np.ndarray, dt: Optional[float] = None) -> Optional[BallState]:
+        if dt is not None:
+            self.dt = dt
+
+        self.history.append(position.copy())
+        if len(self.history) > self.window_size:
+            self.history.pop(0)
+
+        if len(self.history) < 2:
+            pos = self.history[-1]
+            if self.dim == 2:
+                return BallState(x=pos[0], y=pos[1])
+            else:
+                return BallState(x=pos[0], y=pos[1], z=pos[2])
+
+        n_diffs = len(self.history) - 1
+        velocities = []
+        for i in range(n_diffs):
+            v = (self.history[i + 1] - self.history[i]) / self.dt
+            velocities.append(v)
+        avg_velocity = np.mean(velocities, axis=0)
+
+        pos = self.history[-1]
+        if self.dim == 2:
+            return BallState(x=pos[0], y=pos[1], vx=avg_velocity[0], vy=avg_velocity[1])
+        else:
+            return BallState(
+                x=pos[0], y=pos[1], z=pos[2],
+                vx=avg_velocity[0], vy=avg_velocity[1], vz=avg_velocity[2],
+            )
+
+    def update_2d(self, x: float, y: float, dt: Optional[float] = None) -> Optional[BallState]:
+        return self.update(np.array([x, y]), dt)
+
+    def update_3d(self, x: float, y: float, z: float, dt: Optional[float] = None) -> Optional[BallState]:
+        return self.update(np.array([x, y, z]), dt)
+
+    def reset(self):
+        self.history = []
+
+
+class PositionHistoryBuffer:
+    """
+    Position history buffer for prediction-free velocity estimation.
+
+    Instead of explicitly computing velocity, stores the last N position
+    observations and returns them as a tensor suitable for direct input
+    to a policy network. The network learns to implicitly extract velocity
+    and trend from the position sequence.
+
+    Reference: ETH Legged Badminton prediction-free policy (2025)
+    """
+
+    def __init__(self, window_size: int = 10, dim: int = 3):
+        self.window_size = window_size
+        self.dim = dim
+        self.history: list = []
+
+    def update(self, position: np.ndarray) -> np.ndarray:
+        self.history.append(position.copy())
+        if len(self.history) > self.window_size:
+            self.history.pop(0)
+
+        buffer = np.zeros((self.window_size, self.dim))
+        n = len(self.history)
+        for i, pos in enumerate(self.history):
+            buffer[self.window_size - n + i] = pos
+        return buffer
+
+    def update_2d(self, x: float, y: float) -> np.ndarray:
+        return self.update(np.array([x, y]))
+
+    def update_3d(self, x: float, y: float, z: float) -> np.ndarray:
+        return self.update(np.array([x, y, z]))
+
+    @property
+    def is_full(self) -> bool:
+        return len(self.history) == self.window_size
+
+    def reset(self):
+        self.history = []

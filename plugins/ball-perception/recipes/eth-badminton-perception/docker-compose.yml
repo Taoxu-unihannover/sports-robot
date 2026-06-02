@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  ball-perception:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ./data:/data
+      - ./runs:/app/runs
+    command: ["python", "-m", "shuttletrack.predict", "--source", "/data/test"]
+
+  shuttletrack:
+    build:
+      context: ../../../skills/ball-detector/recipes/eth-shuttle-detection
+      dockerfile: Dockerfile
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - ./data:/data
+      - ./runs:/app/runs
+    ports:
+      - "8888:8888"

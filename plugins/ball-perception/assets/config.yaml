@@ -43,6 +43,14 @@ geometry:
     - [0, 0, 1, 0]
     - [0, 0, 0, 1]
 
+# --- Spin Estimator Settings ---
+spin_estimator:
+  method: "trajectory_magnus"  # "trajectory_magnus" (only method currently integrated in pipeline)
+  ball_radius: 0.02            # Ball radius in meters (0.02 = table tennis)
+  air_density: 1.225           # Air density kg/m^3
+  lift_coefficient: 0.4        # Magnus lift coefficient
+  dt: 0.008                    # Time step (1/125 Hz)
+
 # --- Camera Configurations ---
 # Example: Two-camera stereo setup (like DeepMind table tennis)
 cameras:

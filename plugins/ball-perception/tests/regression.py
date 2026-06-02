@@ -19,14 +19,16 @@ import numpy as np
 import yaml
 
 _SKILLS_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "..", "skills")
-sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-filter", "scripts"))
+sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-state-estimator", "scripts"))
 sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-geometry", "scripts"))
 sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-detector", "scripts"))
 sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-tracker", "scripts"))
+sys.path.insert(0, os.path.join(_SKILLS_DIR, "ball-spin-estimator", "scripts"))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "scripts"))
 
 from filter import BallKalmanFilter, ExtendedBallKalmanFilter, BallState
 from geometry import Triangulator, CameraConfig, CoordinateTransformer, StereoDepthEstimator
+from spin import TrajectoryMagnusSpin
 
 
 def validate_output_schema(result):
@@ -338,3 +340,40 @@ class TestPipeline:
             validate_output_schema(result)
         finally:
             os.unlink(config_path)
+
+
+class TestSpinEstimator:
+    def test_magnus_init(self):
+        se = TrajectoryMagnusSpin(ball_radius=0.02, air_density=1.225, lift_coefficient=0.4)
+        assert se.ball_radius == 0.02
+
+    def test_magnus_short_trajectory(self):
+        se = TrajectoryMagnusSpin(ball_radius=0.02)
+        positions = np.array([[0, 0, 1.0], [0, 0, 1.0]])
+        timestamps = np.array([0.0, 0.008])
+        result = se.estimate(positions, timestamps)
+        assert result is None
+
+    def test_magnus_insufficient_data(self):
+        se = TrajectoryMagnusSpin(ball_radius=0.02)
+        positions = np.array([[0, 0, 1.0]])
+        timestamps = np.array([0.0])
+        result = se.estimate(positions, timestamps)
+        assert result is None
+
+    def test_magnus_output_schema(self):
+        se = TrajectoryMagnusSpin(ball_radius=0.02)
+        n = 20
+        dt = 0.008
+        positions = np.zeros((n, 3))
+        timestamps = np.arange(n) * dt
+        for i in range(n):
+            positions[i] = [0.0, 0.0, 2.0 - 0.5 * 9.81 * (i * dt) ** 2 / 2]
+        result = se.estimate(positions, timestamps)
+        if result is not None:
+            assert hasattr(result, "wx")
+            assert hasattr(result, "wy")
+            assert hasattr(result, "wz")
+            assert hasattr(result, "spin_rpm")
+            assert hasattr(result, "confidence")
+            assert hasattr(result, "method")

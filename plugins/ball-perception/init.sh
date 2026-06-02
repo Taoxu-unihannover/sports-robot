@@ -66,7 +66,7 @@ install_dependencies() {
 
 verify_skills() {
     step "Verifying skills..."
-    local skills=("ball-detector" "ball-tracker" "ball-filter" "ball-geometry")
+    local skills=("ball-detector" "ball-tracker" "ball-state-estimator" "ball-geometry")
     local all_ok=true
 
     for skill in "${skills[@]}"; do

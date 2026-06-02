@@ -73,8 +73,9 @@ import sys
 sys.path.insert(0, "plugins/ball-perception/scripts")
 sys.path.insert(0, "skills/ball-detector/scripts")
 sys.path.insert(0, "skills/ball-tracker/scripts")
-sys.path.insert(0, "skills/ball-filter/scripts")
+sys.path.insert(0, "skills/ball-state-estimator/scripts")
 sys.path.insert(0, "skills/ball-geometry/scripts")
+sys.path.insert(0, "skills/ball-spin-estimator/scripts")
 
 from pipeline import PerceptionPipeline
 

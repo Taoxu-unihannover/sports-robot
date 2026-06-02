@@ -7,6 +7,7 @@
 球类机器人落地不是"检测模型 + 机械臂"这么简单，而是一条跨越**高频感知、状态估计、球路建模、决策规划、关节控制、执行机构、系统总线、数据闭环**的全链条工程。本项目将每一层技术栈以 **Marketplace Plugin** 的形式组织，每个 Plugin 包含：
 
 - **Skills**：可复用的原子能力模块（含代码、文档、测试）
+- **Recipes**：经过验证的完整构建方案（从数据到训练到部署）
 - **Agents**：专业 AI Agent（架构师、开发工程师、审查员）
 - **Workflows**：标准化开发流程（设计→串讲→实现→审查→验证）
 - **Hooks**：生命周期钩子（环境初始化、上下文注入）
@@ -22,10 +23,17 @@ sports-robot/
 │   └── marketplace.json          # 根级 Marketplace 注册表
 ├── skills/                       # 独立 Skill 模块（可单独对外呈现）
 │   ├── ball-detector/            # 单帧球体检测
+│   │   ├── scripts/              # 推理代码
+│   │   ├── tests/                # 推理测试
+│   │   ├── examples/             # 调用示例
+│   │   ├── references/           # 论文引用
+│   │   └── recipes/              # 🆕 构建/训练方案
+│   │       ├── eth-shuttle-detection/  # ETH YOLOv8 羽毛球方案
+│   │       └── hsv-quickstart/        # HSV 轻量快速方案
 │   ├── ball-tracker/             # 短轨迹时序平滑
-│   ├── ball-filter/              # Kalman 状态估计
+│   ├── ball-state-estimator/    # 状态估计与速度估计
 │   └── ball-geometry/            # 3D 几何重建
-├── plugins/                     # 官方 Plugin（含 Agent + Workflow）
+├── plugins/                     # 官方 Plugin（含 Agent + Workflow + Recipe）
 │   └── ball-perception/          # 🟢 感知层（已落地）
 │       ├── agents/               # 3 个专业 Agent
 │       ├── workflows/            # 开发规范 + 任务提示 + 模板
@@ -35,12 +43,14 @@ sports-robot/
 │       ├── assets/               # 配置文件模板
 │       ├── references/           # 数学公式 + 论文汇总
 │       ├── examples/             # 使用示例
+│       ├── recipes/              # 🆕 跨 Skill 系统级方案
+│       │   └── eth-badminton-perception/  # ETH 羽毛球感知系统方案
 │       ├── AGENTS.md             # Team 总览
 │       ├── quickstart.md         # 快速开始
 │       └── init.sh               # 环境初始化
 ├── docs/
-│   └── tech-report/              # 技术报告与参考资料
-│       └── 000-tech-report.md    # 全技术栈详尽报告
+│   ├── tech-report/              # 技术报告与参考资料
+│   └── todo/                     # 待办事项与审查报告
 ```
 
 ## 技术栈全景
@@ -80,8 +90,19 @@ Camera → Detector → Tracker → Filter → Geometry → 3D State
 |-------|------|------|--------|
 | `ball-detector` | [skills/ball-detector/](skills/ball-detector/) | 单帧球体检测 | `YOLOv8` · `HSVColorDetector` · `ONNXBallDetector` |
 | `ball-tracker` | [skills/ball-tracker/](skills/ball-tracker/) | 短轨迹时序平滑 | `SlidingWindowTracker` · `TrajectoryTracker` · `TrackNetStyleTracker` |
-| `ball-filter` | [skills/ball-filter/](skills/ball-filter/) | Kalman 状态估计 | `CV` (恒速) · `CA` (恒加速) · `EKF` (扩展 Kalman) |
+| `ball-state-estimator` | [skills/ball-state-estimator/](skills/ball-state-estimator/) | 状态估计与速度估计 | `CV` (恒速) · `CA` (恒加速) · `EKF` (扩展 Kalman) · `SlidingWindow` (滑窗平均) · `PositionHistory` (位置历史) |
 | `ball-geometry` | [skills/ball-geometry/](skills/ball-geometry/) | 3D 几何重建 | `DLT` (直接线性变换) · `Midpoint` (中点法) · `StereoDepthEstimator` |
+
+### Recipes：从推理到构建的完整方案
+Skill 定义"**能做什么**"（推理能力），Recipe 定义"**怎么做到**"（从数据到训练到部署的完整构建方案）。一个 Skill 可以有多种 Recipe，每种代表一种经过验证的具体做法；Plugin Recipe 则组合各 Skill Recipe 形成系统级方案。详见 [Recipe 架构指南](docs/recipe-guide.md)。
+
+#### 当前可用 Recipe
+
+| Recipe | 层级 | 适用球类 | 需要训练 | 性能基准 |
+|--------|------|---------|---------|---------|
+| [eth-shuttle-detection](skills/ball-detector/recipes/eth-shuttle-detection/RECIPE.md) | Skill | 羽毛球 | 是 | F1=0.86（相似场景）/ 0.70（未知场景） |
+| [hsv-quickstart](skills/ball-detector/recipes/hsv-quickstart/RECIPE.md) | Skill | 乒乓球/网球 | 否 | < 2ms 延迟，依赖颜色标定 |
+| [eth-badminton-perception](plugins/ball-perception/recipes/eth-badminton-perception/RECIPE.md) | Plugin | 羽毛球 | 是 | 端到端 < 20ms |
 
 ### 三 Agent 分工
 
@@ -136,7 +157,7 @@ pip install -r requirements.txt
 cd plugins/ball-perception
 python -m pytest tests/regression.py -v
 
-# 预期输出：23 passed, 5 skipped (缺少 opencv 时跳过视觉相关测试)
+# 预期输出：28 passed
 ```
 
 ### 使用感知 Agent
@@ -147,7 +168,7 @@ python -m pytest tests/regression.py -v
 import sys
 sys.path.insert(0, "skills/ball-detector/scripts")
 sys.path.insert(0, "skills/ball-tracker/scripts")
-sys.path.insert(0, "skills/ball-filter/scripts")
+sys.path.insert(0, "skills/ball-state-estimator/scripts")
 sys.path.insert(0, "skills/ball-geometry/scripts")
 
 # 检测器
@@ -197,7 +218,7 @@ import sys
 sys.path.insert(0, "plugins/ball-perception/scripts")
 sys.path.insert(0, "skills/ball-detector/scripts")
 sys.path.insert(0, "skills/ball-tracker/scripts")
-sys.path.insert(0, "skills/ball-filter/scripts")
+sys.path.insert(0, "skills/ball-state-estimator/scripts")
 sys.path.insert(0, "skills/ball-geometry/scripts")
 
 from pipeline import PerceptionPipeline
@@ -266,6 +287,7 @@ result = pipeline.run("input_video.mp4", display=True)
 
 | 资源 | 路径 |
 |------|------|
+| Recipe 架构指南 | [docs/recipe-guide.md](docs/recipe-guide.md) |
 | 全技术栈报告 | [docs/tech-report/000-tech-report.md](docs/tech-report/000-tech-report.md) |
 | 感知层设计 | [docs/tech-report/001-感知层.md](docs/tech-report/001-感知层.md) |
 | 感知 Agent 总览 | [plugins/ball-perception/AGENTS.md](plugins/ball-perception/AGENTS.md) |
@@ -281,11 +303,13 @@ result = pipeline.run("input_video.mp4", display=True)
 
 ## 贡献指南
 
-本项目采用 Marketplace + Plugin + Agent 架构，新增技术栈的标准流程：
+本项目采用 Marketplace + Plugin + Agent + Recipe 架构，新增技术栈的标准流程：
 
 1. 在 `skills/` 下创建独立 Skill 模块（含 SKILL.md + scripts/）
-2. 在 `plugins/` 下创建 Plugin 目录（含 agents/ + workflows/ + hooks/）
-3. 在 `.claude-plugin/marketplace.json` 中注册新 Plugin
-4. 更新本 README 的路线图
+2. 在 `skills/{skill}/recipes/` 下创建 Recipe（含 RECIPE.md + 训练/评测脚本）
+3. 在 `plugins/` 下创建 Plugin 目录（含 agents/ + workflows/ + hooks/）
+4. 在 `plugins/{plugin}/recipes/` 下创建跨 Skill 系统级 Recipe
+5. 在 `.claude-plugin/marketplace.json` 中注册新 Plugin 和 Recipe
+6. 更新本 README 的路线图
 
 详细规范见 [development-guide.md](plugins/ball-perception/workflows/development-guide.md)。

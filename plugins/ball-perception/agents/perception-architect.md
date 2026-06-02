@@ -5,8 +5,9 @@ mode: subagent
 skills:
   - ball-detector
   - ball-tracker
-  - ball-filter
+  - ball-state-estimator
   - ball-geometry
+  - ball-spin-estimator
 permission:
   edit: allow
   read: allow
@@ -77,14 +78,16 @@ permission:
 
 1. 加载 `ball-detector` Skill 了解检测器能力和限制
 2. 加载 `ball-tracker` Skill 了解跟踪器参数和适用场景
-3. 加载 `ball-filter` Skill 了解滤波器模型和噪声特性
+3. 加载 `ball-state-estimator` Skill 了解滤波器模型和噪声特性
 4. 加载 `ball-geometry` Skill 了解三角化方法和标定要求
-5. 综合评估后输出 DESIGN.md + PLAN.md
+5. 加载 `ball-spin-estimator` Skill 了解旋转估计方法和硬件需求
+6. 综合评估后输出 DESIGN.md + PLAN.md
 
 ### 设计检查清单
 
 - [ ] 检测器选型匹配运动类型（快速小球 → YOLO，颜色明显 → HSV）
 - [ ] 滤波器模型匹配运动特性（匀速 → CV，变速 → CA，非线性 → EKF）
 - [ ] 相机布局满足精度要求（基线距离、视角重叠）
+- [ ] 旋转估计方法匹配硬件条件（事件相机 → EventCameraSpin，标记球 → MarkerPoseSpin，无额外硬件 → TrajectoryMagnusSpin）
 - [ ] 模块间接口定义清晰（输入输出类型、坐标系约定）
 - [ ] 失败处理策略完整（检测丢失、遮挡、标定误差）
