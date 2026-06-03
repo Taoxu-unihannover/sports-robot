@@ -1,0 +1,13 @@
+kinematics:
+  link_lengths: [0.45, 0.35, 0.18]
+flight:
+  mass: 0.0027
+  radius: 0.02
+  drag_coefficient: 0.47
+  magnus_gain: 0.0001
+impact:
+  restitution: 0.86
+  tangential_damping: 0.12
+risk:
+  chi_square_threshold: 7.81
+  max_risk_score: 0.75

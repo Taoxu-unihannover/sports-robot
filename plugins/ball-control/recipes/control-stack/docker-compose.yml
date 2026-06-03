@@ -1,0 +1,9 @@
+services:
+  ball-control:
+    image: python:3.11-slim
+    working_dir: /workspace
+    volumes:
+      - ../../..:/workspace
+    command: >
+      sh -c "pip install -r plugins/ball-control/requirements.txt &&
+             python -m pytest plugins/ball-control/tests/test_control_regression.py -q"

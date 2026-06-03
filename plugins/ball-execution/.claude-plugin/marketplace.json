@@ -1,0 +1,11 @@
+{
+  "name": "ball-execution",
+  "plugins": [
+    {
+      "name": "ball-execution",
+      "source": ".",
+      "version": "1.0.0",
+      "category": "development"
+    }
+  ]
+}

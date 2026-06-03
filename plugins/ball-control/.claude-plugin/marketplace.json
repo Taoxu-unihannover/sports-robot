@@ -1,0 +1,11 @@
+{
+  "name": "ball-control",
+  "plugins": [
+    {
+      "name": "ball-control",
+      "source": ".",
+      "version": "1.0.0",
+      "category": "development"
+    }
+  ]
+}

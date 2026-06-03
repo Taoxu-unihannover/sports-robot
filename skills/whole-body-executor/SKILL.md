@@ -1,0 +1,167 @@
+---
+name: whole-body-executor
+description: 用于腿足/人形机器人的全身击球执行，包括支撑稳定、全身动量平衡、足步规划、躯干-手臂协同和类人动作原语。适用于用户需要实现全身击球控制、移动平台+上肢协同、支撑多边形稳定、跌倒风险评估；不用于固定基座机械臂控制或纯运动学规划。
+when_to_use: 用户提到人形、腿足、全身控制、HITTER、LATENT、ETH badminton、支撑多边形、跌倒风险、whole-body、locomotion+manipulation 时触发。
+version: 1.1.0
+allowed-tools:
+  - filesystem.read
+  - filesystem.write
+input_schema:
+  type: object
+  required: [hit_target, robot_state]
+  properties:
+    hit_target:
+      type: object
+      description: 击球目标（位置、拍面法向、拍面速度）
+      properties:
+        position: { type: array, items: { type: number } }
+        paddle_normal: { type: array, items: { type: number } }
+        paddle_velocity: { type: array, items: { type: number } }
+    robot_state:
+      type: object
+      description: 机器人当前状态
+      properties:
+        q: { type: array, items: { type: number } }
+        dq: { type: array, items: { type: number } }
+        base_pose: { type: array, items: { type: number } }
+        contacts: { type: array }
+    stability_margin:
+      type: number
+      description: 最小支撑多边形裕度（m），默认 0.05
+output_schema:
+  type: object
+  required: [joint_commands, stability_status, execution_mode]
+  properties:
+    joint_commands:
+      type: array
+      items: { type: number }
+      description: 全身关节位置/速度/力矩指令
+    base_trajectory:
+      type: array
+      description: 底盘移动轨迹
+    stability_status:
+      type: string
+      enum: [stable, guarded, degraded]
+    execution_mode:
+      type: string
+      enum: [full_body, arm_only, defensive_reset]
+---
+
+# 全身击球执行
+
+## 何时使用
+
+当机器人平台为腿足/人形等全身系统，需要同时协调移动底盘和上肢完成击球任务时使用。典型场景：
+
+- 人形机器人打网球（HITTER/LATENT 路线）
+- 腿足机器人打羽毛球（ETH 路线）
+- 移动平台+机械臂的协同击球
+- 击球后的稳定恢复和复位
+
+不适用于：固定基座机械臂控制、纯运动学 IK 求解、无移动需求的桌面级系统。
+
+## 输入约束
+
+- hit_target 必须包含位置和拍面法向（来自 hit-planner）
+- robot_state 必须包含关节状态和接触状态
+- 支撑多边形裕度必须 > 0 才能执行击球
+- 击球速度需求不能超过关节力矩/速度限制
+
+## 执行步骤
+
+### 步骤 1：稳定性评估
+
+- 动作：计算当前质心在支撑多边形内的裕度
+- 输入：robot_state.contacts, robot_state.base_pose
+- 成功标准：stability_margin > 阈值（默认 5 cm）
+- 失败处理：裕度不足时切换为 arm_only 模式或先执行步态调整
+
+### 步骤 2：任务分配
+
+- 动作：将击球任务分解为底盘位移和上肢动作
+- 输入：hit_target, robot_state, stability_margin
+- 成功标准：分解后的底盘轨迹和上肢轨迹在力矩/速度限制内
+- 失败处理：任务不可分解时降级为 defensive_reset
+
+### 步骤 3：全身轨迹生成
+
+- 动作：用全身 QP/OCP 或 RL 策略生成协调轨迹
+- 输入：分解后的任务 + 动力学约束
+- 成功标准：轨迹满足击球约束 + 稳定约束 + 关节限位
+- 失败处理：求解失败时回退到 last-safe trajectory
+
+### 步骤 4：安全投影
+
+- 动作：检查轨迹是否满足安全约束（力矩、速度、碰撞）
+- 输入：生成的轨迹 + 安全限制
+- 成功标准：所有约束满足
+- 失败处理：约束违反时做最小修正投影或降级
+
+## 输出格式
+
+```json
+{
+  "joint_commands": [0.1, -0.5, 0.3],
+  "base_trajectory": [[0.0, 0.0, 0.0], [0.5, 0.3, 0.1]],
+  "stability_status": "stable",
+  "execution_mode": "full_body"
+}
+```
+
+## 可用方法与代表性系统
+
+### 方法一：分层全身 RL — HITTER 路线
+
+HITTER 系统（Tübingen）用于人形网球，核心思想是"高层规划 + 低层 RL 执行"：
+
+1. **高层**：基于模型的击球规划器输出拍面目标状态（位置、法向、速度）
+2. **低层**：全身 RL 策略将拍面目标转化为全身关节指令，同时保持平衡
+3. **训练**：在仿真中用 PPO 训练，域随机化增强 sim-to-real 迁移
+4. **关键设计**：策略不直接输出关节力矩，而是输出"期望末端加速度 + 躯干加速度"，再通过全身 QP 求解器映射到关节力矩——这保证了力矩约束和接触约束始终满足
+
+### 方法二：人类运动先验 + 学习残差 — LATENT 路线
+
+LATENT 系统（Tübingen）同样用于人形网球，但采用"人类运动先验 + 学习残差"策略：
+
+1. **运动先验**：从人类网球运动员的 MoCap 数据中提取运动模式（步法、挥拍、重心转移）
+2. **残差学习**：RL 策略只学习人类先验与实际需求之间的差异
+3. **优势**：策略输出更自然、更高效，且训练收敛更快
+4. **代价**：需要高质量的 MoCap 数据，且策略受限于先验覆盖的动作空间
+
+### 方法三：腿足机动 + 上肢击球解耦 — ETH 路线
+
+ETH 腿足羽毛球系统将全身控制解耦为两个子问题：
+
+1. **腿足机动**：四足机器人负责移动到击球位置、保持稳定姿态
+2. **上肢击球**：6-DoF 机械臂负责精确的拍面控制
+3. **协调接口**：腿足控制器将当前支撑状态和可用裕度传递给上肢控制器，上肢控制器将反作用力传递给腿足控制器
+4. **关键设计**：解耦使得两个子系统可以独立开发和测试，但需要仔细处理反作用力的耦合
+
+### 方法对比
+
+| 维度 | 分层RL (HITTER) | 人类先验 (LATENT) | 解耦控制 (ETH) |
+|------|----------------|-------------------|---------------|
+| 动作自然性 | 中 | 高 | 中 |
+| 训练数据需求 | 仅仿真 | MoCap + 仿真 | 仅仿真 |
+| 全身协调深度 | 深（端到端） | 深（先验+残差） | 浅（接口解耦） |
+| 部署难度 | 高 | 高 | 中 |
+| 反作用力处理 | QP求解器 | 隐式学习 | 显式传递 |
+| 适合平台 | 人形 | 人形 | 腿足+臂 |
+
+## 可用方案（Recipes）
+
+| Recipe | 适用平台 | 对应方法 | 难度 | 需要训练 | 性能基准 |
+|--------|---------|---------|------|---------|---------|
+| [latent-humanoid-tennis](recipes/latent-humanoid-tennis/RECIPE.md) | 人形 | 人类先验+残差 (LATENT) | advanced | 是 | MoCap + 仿真训练 |
+| [eth-legged-badminton](recipes/eth-legged-badminton/RECIPE.md) | 腿足+臂 | 解耦控制 (ETH) | advanced | 是 | 400Hz 状态估计 |
+
+## 失败处理
+
+| 失败场景 | 检测方式 | 处理策略 |
+|----------|----------|----------|
+| 支撑裕度不足 | margin < threshold | 切换 arm_only 或执行步态调整 |
+| 任务不可分解 | QP/OCP 无解 | 降级为 defensive_reset |
+| 求解超时 | 超过截止时间 | 回退 last-safe trajectory |
+| 关节限位违反 | 命令超出范围 | 安全投影到限位边界 |
+| 碰撞风险 | 自碰撞检测 | 取消击球，执行复位 |
+| 反作用力过大 | 力矩超限 | 降低击球速度或切换保守策略 |

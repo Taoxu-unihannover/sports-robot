@@ -1,0 +1,21 @@
+planner:
+  workspace_radius: 1.2
+  min_time: 0.08
+  max_time: 0.8
+mpc:
+  dt: 0.02
+  horizon: 15
+  u_limit: 8.0
+safety:
+  workspace_radius: 1.2
+  max_speed: 5.0
+  min_time_to_impact: 0.08
+skills:
+  - name: forehand
+    required_margin: 0.1
+    preferred_side: right
+    priority: 1
+  - name: backhand
+    required_margin: 0.1
+    preferred_side: left
+    priority: 1

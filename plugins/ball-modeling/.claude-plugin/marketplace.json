@@ -1,0 +1,11 @@
+{
+  "name": "ball-modeling",
+  "plugins": [
+    {
+      "name": "ball-modeling",
+      "source": ".",
+      "version": "1.0.0",
+      "category": "development"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "ball-engineering",
+  "plugins": [
+    {
+      "name": "ball-engineering",
+      "source": ".",
+      "version": "1.0.0",
+      "category": "development"
+    }
+  ]
+}

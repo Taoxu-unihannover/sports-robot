@@ -1,0 +1,9 @@
+{
+  "hooks": [
+    {
+      "event": "post-install",
+      "command": "hooks/run-hook.cmd",
+      "description": "Validate engineering plugin metadata and regression tests"
+    }
+  ]
+}

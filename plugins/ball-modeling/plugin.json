@@ -1,0 +1,40 @@
+{
+  "name": "ball-modeling",
+  "version": "1.0.0",
+  "description": "球类机器人建模层开发 Team。含运动学、飞行动力学、接触模型、参数辨识、不确定性风险，适用于从感知状态到控制预测模型的端到端建模工作。",
+  "author": {
+    "name": "SportsRobot"
+  },
+  "keywords": [
+    "ball",
+    "modeling",
+    "kinematics",
+    "flight",
+    "impact",
+    "identification",
+    "uncertainty",
+    "sports-robot"
+  ],
+  "category": "development",
+  "skills": [
+    "ball-kinematic-model",
+    "ball-flight-model",
+    "ball-impact-contact",
+    "model-identification",
+    "model-uncertainty-risk"
+  ],
+  "agents": [
+    "./agents/modeling-architect.md",
+    "./agents/modeling-developer.md",
+    "./agents/modeling-reviewer.md"
+  ],
+  "recipes": [
+    "./recipes/modeling-stack"
+  ],
+  "dependencies": {
+    "python": ">=3.8",
+    "numpy": ">=1.21",
+    "pytest": ">=7.0",
+    "pyyaml": ">=6.0"
+  }
+}

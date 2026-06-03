@@ -105,6 +105,349 @@
       "recipes": [
         "./recipes/eth-badminton-perception"
       ]
+    },
+    {
+      "name": "ball-modeling-skills",
+      "description": "球类机器人建模层技能包。覆盖运动学、飞行动力学、球拍/地面接触、系统辨识与不确定性风险建模，并沉淀 MIT、ETH、ACE 等论文/项目案例。",
+      "source": "./skills",
+      "version": "1.0.0",
+      "author": {
+        "name": "SportsRobot"
+      },
+      "keywords": [
+        "modeling",
+        "kinematics",
+        "dynamics",
+        "aerodynamics",
+        "impact",
+        "contact",
+        "identification",
+        "uncertainty",
+        "sports-robot"
+      ],
+      "category": "skills",
+      "skills": [
+        {
+          "name": "ball-kinematic-model",
+          "path": "./ball-kinematic-model",
+          "recipes": [
+            "./ball-kinematic-model/recipes/pinocchio-lie-kinematics"
+          ]
+        },
+        {
+          "name": "ball-flight-model",
+          "path": "./ball-flight-model",
+          "recipes": [
+            "./ball-flight-model/recipes/mit-lumped-drag",
+            "./ball-flight-model/recipes/eth-shuttle-aero"
+          ]
+        },
+        {
+          "name": "ball-impact-contact",
+          "path": "./ball-impact-contact",
+          "recipes": [
+            "./ball-impact-contact/recipes/mit-paddle-impact"
+          ]
+        },
+        {
+          "name": "model-identification",
+          "path": "./model-identification",
+          "recipes": [
+            "./model-identification/recipes/eth-system-identification"
+          ]
+        },
+        {
+          "name": "model-uncertainty-risk",
+          "path": "./model-uncertainty-risk",
+          "recipes": [
+            "./model-uncertainty-risk/recipes/ace-spin-state-fusion"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ball-modeling",
+      "description": "球类机器人建模层开发 Team。含运动学/动力学/接触/辨识/风险模型的架构、实现与审查 Agent，以及从感知状态到控制预测模型的工程模板。",
+      "source": "./plugins/ball-modeling",
+      "version": "1.0.0",
+      "author": {
+        "name": "SportsRobot"
+      },
+      "keywords": [
+        "modeling",
+        "trajectory",
+        "impact",
+        "identification",
+        "uncertainty",
+        "sports-robot"
+      ],
+      "category": "development",
+      "dependencies": [
+        "ball-modeling-skills"
+      ],
+      "agents": [
+        "./agents/modeling-architect.md",
+        "./agents/modeling-developer.md",
+        "./agents/modeling-reviewer.md"
+      ],
+      "recipes": [
+        "./recipes/modeling-stack"
+      ]
+    },
+    {
+      "name": "ball-control-skills",
+      "description": "球类机器人控制层技能包。覆盖击球规划、MPC、技能策略控制与安全监督，并沉淀最优控制、实时 MPC、技能库/RL、失败恢复等论文与项目案例。",
+      "source": "./skills",
+      "version": "1.0.0",
+      "author": {
+        "name": "SportsRobot"
+      },
+      "keywords": [
+        "control",
+        "planning",
+        "mpc",
+        "optimal-control",
+        "reinforcement-learning",
+        "safety",
+        "sports-robot"
+      ],
+      "category": "skills",
+      "skills": [
+        {
+          "name": "hit-planner",
+          "path": "./hit-planner",
+          "recipes": [
+            "./hit-planner/recipes/mit-terminal-ocp"
+          ]
+        },
+        {
+          "name": "mpc-controller",
+          "path": "./mpc-controller",
+          "recipes": [
+            "./mpc-controller/recipes/acados-rti-mpc"
+          ]
+        },
+        {
+          "name": "skill-policy-controller",
+          "path": "./skill-policy-controller",
+          "recipes": [
+            "./skill-policy-controller/recipes/deepmind-skill-library",
+            "./skill-policy-controller/recipes/hitter-wholebody-rl"
+          ]
+        },
+        {
+          "name": "control-safety-supervisor",
+          "path": "./control-safety-supervisor",
+          "recipes": [
+            "./control-safety-supervisor/recipes/ace-last-safe-reset"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ball-control",
+      "description": "球类机器人控制层开发 Team。含击球目标生成、轨迹优化、实时 MPC、策略控制与安全监督的 Agent 与端到端控制栈模板。",
+      "source": "./plugins/ball-control",
+      "version": "1.0.0",
+      "author": {
+        "name": "SportsRobot"
+      },
+      "keywords": [
+        "control",
+        "mpc",
+        "planner",
+        "policy",
+        "safety",
+        "sports-robot"
+      ],
+      "category": "development",
+      "dependencies": [
+        "ball-control-skills"
+      ],
+      "agents": [
+        "./agents/control-architect.md",
+        "./agents/control-developer.md",
+        "./agents/control-reviewer.md"
+      ],
+      "recipes": [
+        "./recipes/control-stack"
+      ]
+    },
+    {
+      "name": "ball-execution-skills",
+      "description": "球类机器人执行层技能包。覆盖发球机、高速机械臂、移动底盘、全身执行与伺服安全，并沉淀 AIMY、MIT、HAMLET、HITTER、ETH 等案例。",
+      "source": "./skills",
+      "version": "1.0.0",
+      "author": {
+        "name": "SportsRobot"
+      },
+      "keywords": [
+        "execution",
+        "actuation",
+        "launcher",
+        "manipulator",
+        "mobile-base",
+        "whole-body",
+        "servo",
+        "sports-robot"
+      ],
+      "category": "skills",
+      "skills": [
+        {
+          "name": "ball-launcher-executor",
+          "path": "./ball-launcher-executor",
+          "recipes": [
+            "./ball-launcher-executor/recipes/aimy-ball-launcher"
+          ]
+        },
+        {
+          "name": "high-speed-manipulator",
+          "path": "./high-speed-manipulator",
+          "recipes": [
+            "./high-speed-manipulator/recipes/mit-lightweight-arm"
+          ]
+        },
+        {
+          "name": "mobile-base-executor",
+          "path": "./mobile-base-executor",
+          "recipes": [
+            "./mobile-base-executor/recipes/hamlet-mobile-manipulator"
+          ]
+        },
+        {
+          "name": "whole-body-executor",
+          "path": "./whole-body-executor",
+          "recipes": [
+            "./whole-body-executor/recipes/latent-humanoid-tennis",
+            "./whole-body-executor/recipes/eth-legged-badminton"
+          ]
+        },
+        {
+          "name": "servo-drive-safety",
+          "path": "./servo-drive-safety",
+          "recipes": [
+            "./servo-drive-safety/recipes/ethercat-servo-safety"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ball-execution",
+      "description": "球类机器人执行层开发 Team。含发球机、机械臂、底盘、全身执行、伺服驱动和急停联锁的 Agent 与工程模板。",
+      "source": "./plugins/ball-execution",
+      "version": "1.0.0",
+      "author": {
+        "name": "SportsRobot"
+      },
+      "keywords": [
+        "execution",
+        "hardware",
+        "servo",
+        "arm",
+        "mobile-base",
+        "whole-body",
+        "sports-robot"
+      ],
+      "category": "development",
+      "dependencies": [
+        "ball-execution-skills"
+      ],
+      "agents": [
+        "./agents/execution-architect.md",
+        "./agents/execution-developer.md",
+        "./agents/execution-reviewer.md"
+      ],
+      "recipes": [
+        "./recipes/execution-stack"
+      ]
+    },
+    {
+      "name": "ball-engineering-skills",
+      "description": "球类机器人工程层技能包。覆盖实时系统集成、ROS2/RTOS 中间件、电源与 BMS、HIL 验证、维护发布与现场运维。",
+      "source": "./skills",
+      "version": "1.0.0",
+      "author": {
+        "name": "SportsRobot"
+      },
+      "keywords": [
+        "engineering",
+        "realtime",
+        "ros2",
+        "rtos",
+        "power",
+        "bms",
+        "hil",
+        "maintenance",
+        "sports-robot"
+      ],
+      "category": "skills",
+      "skills": [
+        {
+          "name": "realtime-system-integration",
+          "path": "./realtime-system-integration",
+          "recipes": [
+            "./realtime-system-integration/recipes/timestamped-interface"
+          ]
+        },
+        {
+          "name": "ros2-rtos-middleware",
+          "path": "./ros2-rtos-middleware",
+          "recipes": [
+            "./ros2-rtos-middleware/recipes/ros2-lifecycle-tracing"
+          ]
+        },
+        {
+          "name": "power-electronics-bms",
+          "path": "./power-electronics-bms",
+          "recipes": [
+            "./power-electronics-bms/recipes/48v-power-chain"
+          ]
+        },
+        {
+          "name": "hil-verification",
+          "path": "./hil-verification",
+          "recipes": [
+            "./hil-verification/recipes/log-replay-hil"
+          ]
+        },
+        {
+          "name": "maintenance-release",
+          "path": "./maintenance-release",
+          "recipes": [
+            "./maintenance-release/recipes/versioned-calibration-release"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ball-engineering",
+      "description": "球类机器人工程层开发 Team。含实时接口、中间件、电气安全、HIL、日志回放、发布维护和现场运维的 Agent 与工程模板。",
+      "source": "./plugins/ball-engineering",
+      "version": "1.0.0",
+      "author": {
+        "name": "SportsRobot"
+      },
+      "keywords": [
+        "engineering",
+        "integration",
+        "realtime",
+        "ros2",
+        "hil",
+        "operations",
+        "sports-robot"
+      ],
+      "category": "development",
+      "dependencies": [
+        "ball-engineering-skills"
+      ],
+      "agents": [
+        "./agents/engineering-architect.md",
+        "./agents/engineering-developer.md",
+        "./agents/engineering-reviewer.md"
+      ],
+      "recipes": [
+        "./recipes/engineering-stack"
+      ]
     }
   ]
 }

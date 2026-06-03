@@ -1,0 +1,9 @@
+services:
+  ball-engineering:
+    image: python:3.11-slim
+    working_dir: /workspace
+    volumes:
+      - ../../..:/workspace
+    command: >
+      sh -c "pip install -r plugins/ball-engineering/requirements.txt &&
+             python -m pytest plugins/ball-engineering/tests/test_engineering_regression.py -q"

@@ -1,0 +1,38 @@
+{
+  "name": "ball-control",
+  "version": "1.0.0",
+  "description": "球类机器人控制层开发 Team。含击球规划、实时 MPC、技能策略控制、安全监督，适用于将预测轨迹转成可执行击球命令。",
+  "author": {
+    "name": "SportsRobot"
+  },
+  "keywords": [
+    "ball",
+    "control",
+    "planner",
+    "mpc",
+    "policy",
+    "safety",
+    "sports-robot"
+  ],
+  "category": "development",
+  "skills": [
+    "hit-planner",
+    "mpc-controller",
+    "skill-policy-controller",
+    "control-safety-supervisor"
+  ],
+  "agents": [
+    "./agents/control-architect.md",
+    "./agents/control-developer.md",
+    "./agents/control-reviewer.md"
+  ],
+  "recipes": [
+    "./recipes/control-stack"
+  ],
+  "dependencies": {
+    "python": ">=3.8",
+    "numpy": ">=1.21",
+    "pytest": ">=7.0",
+    "pyyaml": ">=6.0"
+  }
+}

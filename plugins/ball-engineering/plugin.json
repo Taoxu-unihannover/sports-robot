@@ -1,0 +1,41 @@
+{
+  "name": "ball-engineering",
+  "version": "1.0.0",
+  "description": "球类机器人工程层开发 Team。含实时系统集成、ROS2/RTOS、电源与 BMS、HIL 验证、维护发布，适用于把算法系统沉淀为可上线工程。",
+  "author": {
+    "name": "SportsRobot"
+  },
+  "keywords": [
+    "ball",
+    "engineering",
+    "realtime",
+    "ros2",
+    "rtos",
+    "power",
+    "hil",
+    "maintenance",
+    "sports-robot"
+  ],
+  "category": "development",
+  "skills": [
+    "realtime-system-integration",
+    "ros2-rtos-middleware",
+    "power-electronics-bms",
+    "hil-verification",
+    "maintenance-release"
+  ],
+  "agents": [
+    "./agents/engineering-architect.md",
+    "./agents/engineering-developer.md",
+    "./agents/engineering-reviewer.md"
+  ],
+  "recipes": [
+    "./recipes/engineering-stack"
+  ],
+  "dependencies": {
+    "python": ">=3.8",
+    "numpy": ">=1.21",
+    "pytest": ">=7.0",
+    "pyyaml": ">=6.0"
+  }
+}

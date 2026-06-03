@@ -1,0 +1,9 @@
+services:
+  ball-execution:
+    image: python:3.11-slim
+    working_dir: /workspace
+    volumes:
+      - ../../..:/workspace
+    command: >
+      sh -c "pip install -r plugins/ball-execution/requirements.txt &&
+             python -m pytest plugins/ball-execution/tests/test_execution_regression.py -q"

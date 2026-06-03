@@ -1,0 +1,17 @@
+launcher:
+  speed_gain: 0.1
+  yaw_gain: 1.0
+  pitch_gain: 1.0
+  spin_gain: 0.05
+manipulator:
+  max_velocity: 2.0
+  max_acceleration: 6.0
+  dt: 0.01
+base:
+  linear_speed: 0.6
+  angular_gain: 2.0
+servo:
+  position_min: -1.5
+  position_max: 1.5
+  velocity_max: 4.0
+  torque_max: 25.0
