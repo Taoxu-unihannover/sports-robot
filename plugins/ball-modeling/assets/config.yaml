@@ -8,6 +8,15 @@ flight:
 impact:
   restitution: 0.86
   tangential_damping: 0.12
+dynamics:
+  gravity: 9.81
+  links:
+    - mass: 1.5
+      length: 0.45
+    - mass: 1.0
+      length: 0.35
+    - mass: 0.5
+      length: 0.18
 risk:
   chi_square_threshold: 7.81
   max_risk_score: 0.75

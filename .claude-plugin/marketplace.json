@@ -108,9 +108,9 @@
     },
     {
       "name": "ball-modeling-skills",
-      "description": "球类机器人建模层技能包。覆盖运动学、飞行动力学、球拍/地面接触、系统辨识与不确定性风险建模，并沉淀 MIT、ETH、ACE 等论文/项目案例。",
+      "description": "球类机器人建模层技能包。覆盖运动学、飞行动力学、球拍/地面接触、系统辨识、不确定性风险、传感器时空标定与机器人刚体动力学，并沉淀 MIT、ETH、ACE 等论文/项目案例。",
       "source": "./skills",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "author": {
         "name": "SportsRobot"
       },
@@ -123,6 +123,9 @@
         "contact",
         "identification",
         "uncertainty",
+        "calibration",
+        "sensor-alignment",
+        "robot-dynamics",
         "sports-robot"
       ],
       "category": "skills",
@@ -162,14 +165,24 @@
           "recipes": [
             "./model-uncertainty-risk/recipes/ace-spin-state-fusion"
           ]
+        },
+        {
+          "name": "sensor-calibration-alignment",
+          "path": "./sensor-calibration-alignment",
+          "recipes": []
+        },
+        {
+          "name": "robot-dynamics-model",
+          "path": "./robot-dynamics-model",
+          "recipes": []
         }
       ]
     },
     {
       "name": "ball-modeling",
-      "description": "球类机器人建模层开发 Team。含运动学/动力学/接触/辨识/风险模型的架构、实现与审查 Agent，以及从感知状态到控制预测模型的工程模板。",
+      "description": "球类机器人建模层开发 Team。含运动学/动力学/接触/辨识/风险/标定模型的架构、实现与审查 Agent，以及从感知状态到控制预测模型的工程模板。",
       "source": "./plugins/ball-modeling",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "author": {
         "name": "SportsRobot"
       },
@@ -179,6 +192,8 @@
         "impact",
         "identification",
         "uncertainty",
+        "calibration",
+        "dynamics",
         "sports-robot"
       ],
       "category": "development",

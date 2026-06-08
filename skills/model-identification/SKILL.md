@@ -148,6 +148,7 @@ DeepMind 采用"辨识→校准→域随机化"三步法：
 | Recipe | 适用球类 | 对应方法 | 难度 | 需要训练 | 性能基准 |
 |--------|---------|---------|------|---------|---------|
 | [eth-system-identification](recipes/eth-system-identification/RECIPE.md) | 羽毛球 | 集成辨识 (ETH) | advanced | 否 | 全系统联合辨识 |
+| [casadi-nls-identification](recipes/casadi-nls-identification/RECIPE.md) | 乒乓球/网球/羽毛球 | CasADi+IPOPT NLS | advanced | 否 | 解析雅可比+收敛>99% |
 
 ## 失败处理
 

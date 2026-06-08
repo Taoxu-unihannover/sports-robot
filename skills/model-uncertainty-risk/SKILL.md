@@ -131,6 +131,8 @@ output_schema:
 | Recipe | 适用球类 | 对应方法 | 难度 | 需要训练 | 性能基准 |
 |--------|---------|---------|------|---------|---------|
 | [ace-spin-state-fusion](recipes/ace-spin-state-fusion/RECIPE.md) | 乒乓球 | Ace 旋转+状态融合 | advanced | 否 | 协方差传播+风险门控 |
+| [deepmind-delay-distribution](recipes/deepmind-delay-distribution/RECIPE.md) | 乒乓球/网球/羽毛球 | DeepMind 延迟分布建模 | advanced | 否 | 协方差膨胀+策略降级 |
+| [gtsam-isam2-async-fusion](recipes/gtsam-isam2-async-fusion/RECIPE.md) | 乒乓球/网球/羽毛球 | GTSAM/ISAM2 异步融合 | advanced | 否 | 增量更新<0.5ms |
 
 ## 失败处理
 

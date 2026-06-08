@@ -122,6 +122,7 @@ output_schema:
 | Recipe | 适用球类 | 对应方法 | 难度 | 需要训练 | 性能基准 |
 |--------|---------|---------|------|---------|---------|
 | [mit-paddle-impact](recipes/mit-paddle-impact/RECIPE.md) | 乒乓球 | MIT lumped参数 | intermediate | 否 | 冲量模型+参数辨识 |
+| [mujoco-compliant-contact](recipes/mujoco-compliant-contact/RECIPE.md) | 乒乓球/网球/羽毛球 | MuJoCo 顺应接触 | advanced | 否 | 连续可导+OCP收敛>95% |
 
 ## 失败处理
 

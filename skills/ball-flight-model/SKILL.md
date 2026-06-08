@@ -122,6 +122,7 @@ $$\dot p = v, \quad m\dot v = mg - k_d\|v\|v + k_m(\omega \times v)$$
 |--------|---------|---------|------|---------|---------|
 | [mit-lumped-drag](recipes/mit-lumped-drag/RECIPE.md) | 乒乓球 | MIT lumped drag | beginner | 否 | 简化飞行+离线辨识 |
 | [eth-shuttle-aero](recipes/eth-shuttle-aero/RECIPE.md) | 羽毛球 | ETH 高阻力模型 | intermediate | 否 | 指数衰减+EKF |
+| [shuttle-magnus-effect](recipes/shuttle-magnus-effect/RECIPE.md) | 羽毛球 | 羽毛球 Magnus 效应 | advanced | 否 | 切削球偏移预测<20% |
 
 ## 失败处理
 
