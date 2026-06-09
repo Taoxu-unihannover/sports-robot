@@ -1,0 +1,15 @@
+name: sac-mecanum-navigation
+description: SAC 训练麦克纳姆底盘导航策略
+inputs:
+  algorithm: SAC
+  total_timesteps: 15000
+  config:
+    learning_rate: 5.0e-4
+    batch_size: 512
+    buffer_size: 3000000
+    net_arch: [1024, 512]
+    gamma: 0.99
+    tau: 0.005
+    ent_coef: auto
+  n_envs: 2
+  save_frequency: 50

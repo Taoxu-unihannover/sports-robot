@@ -1,0 +1,8 @@
+<mujoco model="tennis_world">
+    <include file="assets/assets.xml"/>
+    <worldbody>
+        <include file="assets/scene.xml"/>
+        <include file="assets/robot.xml"/>
+    </worldbody>
+    <include file="assets/actuator.xml"/>
+</mujoco>

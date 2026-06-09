@@ -1,0 +1,13 @@
+algorithm: SAC
+total_timesteps: 15000
+learning_rate: 5.0e-4
+batch_size: 512
+buffer_size: 3000000
+net_arch: [1024, 512]
+gamma: 0.99
+tau: 0.005
+ent_coef: auto
+target_update_interval: 1
+n_envs: 2
+save_frequency: 50
+max_episode_steps: 2000

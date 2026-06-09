@@ -1,0 +1,6 @@
+name: tennis-ball-camera
+description: 网球仿真相机感知
+inputs:
+  image_width: 640
+  image_height: 480
+  perception_pipeline: detector

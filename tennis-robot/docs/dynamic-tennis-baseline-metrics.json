@@ -1,0 +1,48 @@
+{
+  "source": "dynamic-tennis",
+  "check_env": "PASSED",
+  "training_timesteps": 5000,
+  "training_throughput_steps_sec": 19.9,
+  "evaluation_episodes": 5,
+  "success_rate": 0.0,
+  "avg_reward": 20805.766766959052,
+  "avg_steps": 209.2,
+  "avg_final_distance": 5.818549022337038,
+  "episodes": [
+    {
+      "episode": 1,
+      "reward": -4874.765578378909,
+      "steps": 201,
+      "success": false,
+      "final_distance": 8.882377565429227
+    },
+    {
+      "episode": 2,
+      "reward": 30831.85853646189,
+      "steps": 224,
+      "success": false,
+      "final_distance": 5.580649255650313
+    },
+    {
+      "episode": 3,
+      "reward": 33516.51949552668,
+      "steps": 252,
+      "success": false,
+      "final_distance": 5.6622476704582905
+    },
+    {
+      "episode": 4,
+      "reward": 2955.311229566092,
+      "steps": 174,
+      "success": false,
+      "final_distance": 7.447808882750878
+    },
+    {
+      "episode": 5,
+      "reward": 41599.9101516195,
+      "steps": 195,
+      "success": false,
+      "final_distance": 1.5196617373964836
+    }
+  ]
+}

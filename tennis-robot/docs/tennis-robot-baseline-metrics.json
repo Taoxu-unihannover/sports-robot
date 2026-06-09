@@ -1,0 +1,48 @@
+{
+  "source": "tennis-robot",
+  "check_env": "PASSED",
+  "training_timesteps": 5000,
+  "training_throughput_steps_sec": 18.5,
+  "evaluation_episodes": 5,
+  "success_rate": 0.0,
+  "avg_reward": -20678.23469620807,
+  "avg_steps": 207.6,
+  "avg_final_distance": 7.316779548201498,
+  "episodes": [
+    {
+      "episode": 1,
+      "reward": -16295.514438902446,
+      "steps": 220,
+      "success": false,
+      "final_distance": 6.572406604883401
+    },
+    {
+      "episode": 2,
+      "reward": -24270.492600676982,
+      "steps": 214,
+      "success": false,
+      "final_distance": 8.103142825905822
+    },
+    {
+      "episode": 3,
+      "reward": -23308.342118156605,
+      "steps": 163,
+      "success": false,
+      "final_distance": 7.744586656651489
+    },
+    {
+      "episode": 4,
+      "reward": -23606.552422642333,
+      "steps": 138,
+      "success": false,
+      "final_distance": 7.769983520974666
+    },
+    {
+      "episode": 5,
+      "reward": -15910.27190066197,
+      "steps": 303,
+      "success": false,
+      "final_distance": 6.393778132592116
+    }
+  ]
+}

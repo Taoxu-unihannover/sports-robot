@@ -1,43 +1,6 @@
 ---
 name: mobile-base-executor
-description: 用于轮式移动底盘的粗定位、底盘-上肢协同、场地覆盖和功率预算管理。适用于用户需要实现移动平台定位、底盘+机械臂分工、全场覆盖规划；不用于固定基座系统或纯腿足平台。
-when_to_use: 用户提到底盘、移动平台、轮式机器人、Hamlet、底盘定位、粗细分工、全场覆盖、mobile base、omni-directional 时触发。
-version: 1.1.0
-allowed-tools:
-  - filesystem.read
-  - filesystem.write
-input_schema:
-  type: object
-  required: [target_position, current_state]
-  properties:
-    target_position:
-      type: array
-      items: { type: number }
-      description: 目标底盘位置 [x, y, theta]
-    current_state:
-      type: object
-      description: 当前底盘状态
-      properties:
-        position: { type: array }
-        velocity: { type: array }
-        arm_capability: { type: object }
-    coordination_mode:
-      type: string
-      enum: [coarse_fine, simultaneous, base_only]
-      description: 协同模式，默认 coarse_fine
-output_schema:
-  type: object
-  required: [base_command, coordination_status]
-  properties:
-    base_command:
-      type: object
-      description: 底盘速度/位置指令
-    arm_budget:
-      type: object
-      description: 上肢可用裕度
-    coordination_status:
-      type: string
-      enum: [coarse_positioning, fine_alignment, holding, error]
+description: 用于轮式移动底盘的粗定位、底盘-上肢协同、场地覆盖、功率预算管理和麦克纳姆全向底盘控制。适用于用户需要实现移动平台定位、底盘+机械臂分工、全场覆盖规划、麦克纳姆轮逆运动学控制；不用于固定基座系统或纯腿足平台。
 ---
 
 # 移动底盘与上肢协同
@@ -50,8 +13,49 @@ output_schema:
 - 全场覆盖的移动击球
 - 底盘-上肢的力/运动协同
 - 移动中的动态稳定性维护
+- 麦克纳姆全向底盘的速度/力矩控制
 
 不适用于：固定基座系统、纯腿足平台、无移动需求的桌面级系统。
+
+## 麦克纳姆底盘控制
+
+### 逆运动学
+
+麦克纳姆底盘的逆运动学将底盘速度 (vx, vy, ω) 映射到四轮速度：
+
+```
+front_left  = (1/r) × (vx - vy - ω×(L+W)/2)
+front_right = (1/r) × (vx + vy + ω×(L+W)/2)
+back_left   = (1/r) × (vx + vy - ω×(L+W)/2)
+back_right  = (1/r) × (vx - vy + ω×(L+W)/2)
+```
+
+其中 r=轮半径, L=轮距, W=轨宽。
+
+### 动作空间
+
+| 底盘类型 | 动作维度 | 说明 |
+|---|---|---|
+| differential | 2 | [v, ω] |
+| mecanum | 3 | [x_move, y_move, rotate]，范围 [-1, 1] |
+| omni | 3 | [vx, vy, ω] |
+
+### 速度限制
+
+| 参数 | 典型值 | 说明 |
+|---|---|---|
+| max_linear_velocity | 5.0 m/s | 最大线速度 |
+| max_angular_velocity | 1.5 rad/s | 最大角速度 |
+| wheel_torque_limit | 50.0 N·m | 单轮最大力矩 |
+
+### RL 动作映射
+
+SAC/PPO 输出归一化动作 [-1, 1]，通过以下映射转为轮速力矩：
+
+1. action = [x_move, y_move, rotate]
+2. IK 分解为四轮指令
+3. 归一化（最大值裁剪到 [-1, 1]）
+4. 缩放到力矩范围
 
 ## 输入约束
 

@@ -1,0 +1,10 @@
+name: tennis-mecanum-world
+description: 网球 + 麦克纳姆底盘仿真场景
+inputs:
+  sport_type: tennis
+  robot_model: mecanum
+  court_dimensions:
+    length: 11.885
+    width: 8.23
+  include_ball: true
+  ball_radius: 0.067

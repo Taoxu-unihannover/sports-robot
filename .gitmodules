@@ -1,0 +1,3 @@
+[submodule "dynamic-tennis"]
+	path = dynamic-tennis
+	url = https://github.com/Taoxu-unihannover/dynamic-tennis

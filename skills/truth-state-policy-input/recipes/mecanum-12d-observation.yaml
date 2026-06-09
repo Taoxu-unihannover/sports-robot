@@ -1,0 +1,28 @@
+name: mecanum-12d-observation
+description: 麦克纳姆12维观测向量
+inputs:
+  observation_schema:
+    - name: goal_distance
+      source: "np.linalg.norm(goal - robot_pos)"
+      normalize: diagonal_length
+    - name: goal_angle
+      source: "np.arctan2(rel_y, rel_x)"
+      normalize: 2*pi
+    - name: rel_angle
+      source: "normalize_angle(goal_angle - yaw)"
+      normalize: pi
+    - name: yaw
+      source: "quat_to_euler(quat)[2]"
+      normalize: 2*pi
+    - name: linear_velocity
+      source: "qvel[6:9]"
+      normalize: max_vel
+      shape: [3]
+    - name: angular_velocity
+      source: "qvel[9:12]"
+      normalize: max_ang_vel
+      shape: [3]
+    - name: tennis_velocity
+      source: "tennis_velocity"
+      normalize: max_vel
+      shape: [2]

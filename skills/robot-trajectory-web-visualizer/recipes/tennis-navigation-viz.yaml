@@ -1,0 +1,7 @@
+name: tennis-navigation-viz
+description: 网球导航轨迹可视化
+inputs:
+  court_dimensions:
+    length: 11.885
+    width: 8.23
+  include_images: false

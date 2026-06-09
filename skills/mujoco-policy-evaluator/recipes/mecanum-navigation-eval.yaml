@@ -1,0 +1,7 @@
+name: mecanum-navigation-eval
+description: 麦克纳姆底盘导航策略评估
+inputs:
+  episodes: 5
+  max_steps: 2000
+  deterministic: true
+  export_web: true

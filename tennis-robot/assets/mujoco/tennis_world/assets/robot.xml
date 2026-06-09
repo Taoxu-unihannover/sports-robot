@@ -1,0 +1,33 @@
+<mujocoinclude>
+    <body name="base_footprint" pos="0 0 -0.009">
+        <joint type="free" stiffness="0" damping="0" frictionloss="0" armature="0"/>
+        <body name="base" pos="0 0 0.127">
+            <inertial pos="0 0 0" quat="1 0 0 0" mass="125.0" diaginertia="1.391 6.853 6.125"/>
+            <geom type="box" size="0.35 0.25 0.15" rgba="0.2 0.2 0.8 1" contype="1" conaffinity="0" group="1"/>
+
+            <body name="front_right_wheel_link" pos="0.2225 -0.2045 0">
+                <inertial pos="0 0 0" quat="0.707107 0 0 0.707107" mass="6.5" diaginertia="0.0524193 0.0303095 0.0303095"/>
+                <joint name="front_right_wheel_rolling_joint" pos="0 0 0" axis="0 1 0"/>
+                <geom size="0.120 0.0435" quat="0.707107 0.707107 0 0" type="cylinder" rgba="0.2 0.2 0.2 0.5" contype="1" conaffinity="0" group="3"/>
+            </body>
+
+            <body name="front_left_wheel_link" pos="0.2225 0.2045 0">
+                <inertial pos="0 0 0" quat="0.707107 0 0 0.707107" mass="6.5" diaginertia="0.0524193 0.0303095 0.0303095"/>
+                <joint name="front_left_wheel_rolling_joint" pos="0 0 0" axis="0 1 0"/>
+                <geom size="0.120 0.0435" quat="0.707107 0.707107 0 0" type="cylinder" rgba="0.2 0.2 0.2 0.5" contype="1" conaffinity="0" group="3"/>
+            </body>
+
+            <body name="back_right_wheel_link" pos="-0.2225 -0.2045 0">
+                <inertial pos="0 0 0" quat="0.707107 0 0 0.707107" mass="6.5" diaginertia="0.0524193 0.0303095 0.0303095"/>
+                <joint name="back_right_wheel_rolling_joint" pos="0 0 0" axis="0 1 0"/>
+                <geom size="0.120 0.0435" quat="0.707107 0.707107 0 0" type="cylinder" rgba="0.2 0.2 0.2 0.5" contype="1" conaffinity="0" group="3"/>
+            </body>
+
+            <body name="back_left_wheel_link" pos="-0.2225 0.2045 0">
+                <inertial pos="0 0 0" quat="0.707107 0 0 0.707107" mass="6.5" diaginertia="0.0524193 0.0303095 0.0303095"/>
+                <joint name="back_left_wheel_rolling_joint" pos="0 0 0" axis="0 1 0"/>
+                <geom size="0.120 0.0435" quat="0.707107 0.707107 0 0" type="cylinder" rgba="0.2 0.2 0.2 0.5" contype="1" conaffinity="0" group="3"/>
+            </body>
+        </body>
+    </body>
+</mujocoinclude>

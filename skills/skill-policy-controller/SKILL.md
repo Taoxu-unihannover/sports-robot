@@ -1,48 +1,6 @@
 ---
 name: skill-policy-controller
-description: 用于球类机器人的技能库管理、高层策略选择、RL/IL 策略训练、动作原语组合和残差学习。适用于用户需要实现技能切换、策略训练、skill selection、残差补偿、策略安全投影；不用于底层伺服控制或纯模型预测控制。
-when_to_use: 用户提到强化学习、模仿学习、技能库、skill selection、HITTER、LATENT、DeepMind、policy、residual learning、PPO、skill library 时触发。
-version: 1.1.0
-allowed-tools:
-  - filesystem.read
-  - filesystem.write
-input_schema:
-  type: object
-  required: [observation, skill_context]
-  properties:
-    observation:
-      type: object
-      description: 当前观测（球状态、机器人状态、环境信息）
-      properties:
-        ball_state: { type: array }
-        robot_state: { type: array }
-        game_context: { type: string }
-    skill_context:
-      type: object
-      description: 技能上下文
-      properties:
-        current_skill: { type: string }
-        skill_history: { type: array }
-        confidence: { type: number }
-    available_skills:
-      type: array
-      description: 可用技能列表
-output_schema:
-  type: object
-  required: [skill_id, target_state, execution_params]
-  properties:
-    skill_id:
-      type: string
-      description: 选择的技能标识
-    target_state:
-      type: object
-      description: 技能目标状态
-    residual:
-      type: array
-      description: 低维残差修正
-    safety_projection:
-      type: string
-      enum: [none, clipped, rejected]
+description: 用于球类机器人的技能库管理、高层策略选择、RL/IL 策略训练、动作原语组合和残差学习。支持 Stable-Baselines3 (SAC/PPO/DDPG/TD3) 训练流程、Gymnasium 环境接口和 MuJoCo 仿真。适用于用户需要实现技能切换、策略训练、skill selection、残差补偿、策略安全投影；不用于底层伺服控制或纯模型预测控制。
 ---
 
 # 技能策略与学习控制
@@ -55,8 +13,54 @@ output_schema:
 - 构建技能库实现多种击球方式切换（forehand/backhand/smash）
 - 用残差学习补偿模型误差（HITTER 路线）
 - 用人类运动先验加速策略学习（LATENT 路线）
+- 使用 SB3 (SAC/PPO/DDPG/TD3) 在 MuJoCo+Gymnasium 环境中训练策略
 
 不适用于：纯模型预测控制（MPC）、底层伺服环、无学习需求的系统。
+
+## SB3/MuJoCo/Gymnasium 训练流程
+
+### 标准训练管线
+
+```
+1. 注册 Gymnasium 环境 → gym.make("MyEnv-v1")
+2. 创建 SB3 模型 → SAC("MlpPolicy", env, ...)
+3. 训练 → model.learn(total_timesteps=N)
+4. 保存 → model.save("path")
+5. 评估 → model.predict(obs, deterministic=True)
+```
+
+### 算法选择
+
+| 算法 | 适用场景 | 推荐超参 |
+|---|---|---|
+| SAC | 连续控制，探索性强 | lr=5e-4, buffer=3M, batch=512, net=[1024,512] |
+| PPO | 稳定训练，on-policy | lr=3e-4, batch=256, net=[256,256] |
+| TD3 | 确定性策略，低方差 | lr=5e-4, buffer=1M, batch=256 |
+| DDPG | 简单连续控制 | lr=1e-3, buffer=1M, batch=256 |
+
+### 环境接口要求
+
+策略训练环境必须满足 Gymnasium 标准接口：
+
+- `reset() → (obs, info)`
+- `step(action) → (obs, reward, terminated, truncated, info)`
+- `observation_space: Box(...)`
+- `action_space: Box(...)`
+- 通过 `stable_baselines3.common.env_checker.check_env`
+
+### 观测/动作空间设计
+
+| 观测类型 | 维度 | 归一化 | 说明 |
+|---|---|---|---|
+| 目标距离 | 1 | / diagonal_length | 目标到机器人的欧氏距离 |
+| 目标角度 | 1 | / 2π | 目标方向角 |
+| 相对角度 | 1 | / π | 目标相对机器人朝向 |
+| 机器人朝向 | 1 | / 2π | yaw 角 |
+| 线速度 | 3 | / max_vel | vx, vy, vz |
+| 角速度 | 3 | / max_ang_vel | wx, wy, wz |
+| 球速度 | 2 | / max_vel | 网球 vx, vy |
+
+动作空间：Box(-1, 1, shape=(3,))，对应 [x_move, y_move, rotate]。
 
 ## 输入约束
 

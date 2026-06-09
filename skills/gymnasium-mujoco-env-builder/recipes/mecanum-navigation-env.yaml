@@ -1,0 +1,28 @@
+name: mecanum-navigation-env
+description: 麦克纳姆底盘导航环境
+inputs:
+  env_name: TennisNavigationEnv
+  observation_schema:
+    - name: goal_distance
+      normalize: diagonal_length
+    - name: goal_angle
+      normalize: 2*pi
+    - name: rel_angle
+      normalize: pi
+    - name: yaw
+      normalize: 2*pi
+    - name: linear_velocity
+      shape: [3]
+      normalize: max_vel
+    - name: angular_velocity
+      shape: [3]
+      normalize: max_ang_vel
+    - name: tennis_velocity
+      shape: [2]
+      normalize: max_vel
+  action_schema:
+    - name: mecanum_command
+      shape: [3]
+      range: [-1, 1]
+  max_episode_steps: 2000
+  frame_skip: 20
