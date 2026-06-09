@@ -1,0 +1,211 @@
+{
+  "benchmark_date": "2026-06-09T17:53:29",
+  "project_name": "dynamic-tennis",
+  "seeds": [
+    0,
+    42,
+    123
+  ],
+  "episodes_per_seed": 5,
+  "stacks": [
+    {
+      "stack_name": "simulation",
+      "methods": [
+        {
+          "name": "mujoco-tennis-world-builder",
+          "source": "sports_robot",
+          "skill": "mujoco-tennis-world-builder"
+        },
+        {
+          "name": "mujoco-policy-evaluator",
+          "source": "sports_robot",
+          "skill": "mujoco-policy-evaluator"
+        }
+      ],
+      "metrics": {
+        "mujoco-tennis-world-builder": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        },
+        "mujoco-policy-evaluator": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        }
+      }
+    },
+    {
+      "stack_name": "perception",
+      "methods": [
+        {
+          "name": "sim-camera-perception-input",
+          "source": "sports_robot",
+          "skill": "sim-camera-perception-input"
+        },
+        {
+          "name": "truth-state-policy-input",
+          "source": "sports_robot",
+          "skill": "truth-state-policy-input"
+        },
+        {
+          "name": "ball-detector",
+          "source": "sports_robot",
+          "skill": "ball-detector"
+        },
+        {
+          "name": "ball-state-estimator",
+          "source": "sports_robot",
+          "skill": "ball-state-estimator"
+        },
+        {
+          "name": "ball-tracker",
+          "source": "sports_robot",
+          "skill": "ball-tracker"
+        }
+      ],
+      "metrics": {
+        "sim-camera-perception-input": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        },
+        "truth-state-policy-input": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        },
+        "ball-detector": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        },
+        "ball-state-estimator": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        },
+        "ball-tracker": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        }
+      }
+    },
+    {
+      "stack_name": "modeling",
+      "methods": [
+        {
+          "name": "ball-flight-model",
+          "source": "sports_robot",
+          "skill": "ball-flight-model"
+        },
+        {
+          "name": "ball-impact-contact",
+          "source": "sports_robot",
+          "skill": "ball-impact-contact"
+        },
+        {
+          "name": "ball-kinematic-model",
+          "source": "sports_robot",
+          "skill": "ball-kinematic-model"
+        }
+      ],
+      "metrics": {
+        "ball-flight-model": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        },
+        "ball-impact-contact": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        },
+        "ball-kinematic-model": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        }
+      }
+    },
+    {
+      "stack_name": "control",
+      "methods": [
+        {
+          "name": "mpc-controller",
+          "source": "sports_robot",
+          "skill": "mpc-controller"
+        },
+        {
+          "name": "control-safety-supervisor",
+          "source": "sports_robot",
+          "skill": "control-safety-supervisor"
+        }
+      ],
+      "metrics": {
+        "mpc-controller": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        },
+        "control-safety-supervisor": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        }
+      }
+    },
+    {
+      "stack_name": "execution",
+      "methods": [
+        {
+          "name": "mobile-base-executor",
+          "source": "sports_robot",
+          "skill": "mobile-base-executor"
+        }
+      ],
+      "metrics": {
+        "mobile-base-executor": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        }
+      }
+    },
+    {
+      "stack_name": "training",
+      "methods": [
+        {
+          "name": "sb3-rl-training-runner",
+          "source": "sports_robot",
+          "skill": "sb3-rl-training-runner"
+        }
+      ],
+      "metrics": {
+        "sb3-rl-training-runner": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        }
+      }
+    },
+    {
+      "stack_name": "engineering",
+      "methods": [
+        {
+          "name": "robot-trajectory-web-visualizer",
+          "source": "sports_robot",
+          "skill": "robot-trajectory-web-visualizer"
+        }
+      ],
+      "metrics": {
+        "robot-trajectory-web-visualizer": {
+          "avg_reward": 0,
+          "avg_distance": 0,
+          "num_episodes": 0
+        }
+      }
+    }
+  ]
+}

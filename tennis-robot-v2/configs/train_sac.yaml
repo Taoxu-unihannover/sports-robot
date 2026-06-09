@@ -1,0 +1,13 @@
+algorithm: SAC
+total_timesteps: 5000
+version: baseline
+n_envs: 1
+
+hyperparams:
+  learning_rate: 5.0e-4
+  buffer_size: 3000000
+  batch_size: 512
+  gamma: 0.99
+  tau: 0.005
+  ent_coef: auto
+  net_arch: [1024, 512]

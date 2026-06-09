@@ -1,0 +1,21 @@
+assimilator:
+  default_domain: tennis
+  scan_excludes:
+    - __pycache__
+    - .git
+    - node_modules
+    - .mypy_cache
+    - saved_models
+    - runs
+    - evaluation_results
+    - web_viz_data
+  max_file_read_chars: 5000
+  benchmark:
+    default_seeds: [0, 42, 123]
+    episodes_per_seed: 5
+    default_timesteps: 5000
+  reproduction:
+    target_coverage: 0.95
+    max_iterations: 5
+  enhancement:
+    target_improvement: 0.05

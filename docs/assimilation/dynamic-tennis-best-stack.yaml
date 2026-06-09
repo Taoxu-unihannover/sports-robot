@@ -1,0 +1,47 @@
+baseline_source: tennis-robot-v2
+compatibility_check:
+  conflicts: []
+  coordinate_system_compatible: true
+  frequency_compatible: true
+  latency_compatible: true
+  safety_covered: true
+  schema_compatible: true
+  units_compatible: true
+project_name: dynamic-tennis
+stacks:
+- reason: Best available method for this stack
+  selected_method: mujoco-tennis-world-builder
+  selected_skill: mujoco-tennis-world-builder
+  source: sports_robot
+  stack_name: simulation
+- reason: Best available method for this stack
+  selected_method: sim-camera-perception-input
+  selected_skill: sim-camera-perception-input
+  source: sports_robot
+  stack_name: perception
+- reason: Best available method for this stack
+  selected_method: ball-flight-model
+  selected_skill: ball-flight-model
+  source: sports_robot
+  stack_name: modeling
+- reason: Best available method for this stack
+  selected_method: mpc-controller
+  selected_skill: mpc-controller
+  source: sports_robot
+  stack_name: control
+- reason: Best available method for this stack
+  selected_method: mobile-base-executor
+  selected_skill: mobile-base-executor
+  source: sports_robot
+  stack_name: execution
+- reason: Best available method for this stack
+  selected_method: sb3-rl-training-runner
+  selected_skill: sb3-rl-training-runner
+  source: sports_robot
+  stack_name: training
+- reason: Best available method for this stack
+  selected_method: robot-trajectory-web-visualizer
+  selected_skill: robot-trajectory-web-visualizer
+  source: sports_robot
+  stack_name: engineering
+target_improvement: 0.05

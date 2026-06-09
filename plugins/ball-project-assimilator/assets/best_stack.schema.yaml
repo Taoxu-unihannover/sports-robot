@@ -1,0 +1,77 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: BestStack
+description: 最优技术栈组合 schema
+type: object
+required:
+  - project_name
+  - stacks
+  - compatibility_check
+properties:
+  project_name:
+    type: string
+  baseline_source:
+    type: string
+  target_improvement:
+    type: number
+    description: 目标超越比例，默认 0.05
+  stacks:
+    type: array
+    items:
+      type: object
+      required:
+        - stack_name
+        - selected_skill
+        - selected_method
+      properties:
+        stack_name:
+          type: string
+          enum: [simulation, perception, modeling, control, execution, engineering, training, evaluation, visualization]
+        selected_skill:
+          type: string
+        selected_method:
+          type: string
+        version:
+          type: string
+        config:
+          type: object
+        reason:
+          type: string
+        alternative:
+          type: object
+          properties:
+            skill:
+              type: string
+            method:
+              type: string
+            reason:
+              type: string
+  compatibility_check:
+    type: object
+    properties:
+      schema_compatible:
+        type: boolean
+      frequency_compatible:
+        type: boolean
+      latency_compatible:
+        type: boolean
+      coordinate_system_compatible:
+        type: boolean
+      units_compatible:
+        type: boolean
+      safety_covered:
+        type: boolean
+      conflicts:
+        type: array
+        items:
+          type: object
+          properties:
+            stack_pair:
+              type: array
+              items:
+                type: string
+            conflict_type:
+              type: string
+            description:
+              type: string
+            resolution:
+              type: string

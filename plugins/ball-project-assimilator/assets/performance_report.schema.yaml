@@ -1,0 +1,83 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: PerformanceReport
+description: 性能对比报告 schema
+type: object
+required:
+  - report_date
+  - project_a_name
+  - comparison_versions
+  - metrics
+properties:
+  report_date:
+    type: string
+    format: date-time
+  project_a_name:
+    type: string
+  project_a_url:
+    type: string
+  hardware:
+    type: object
+    properties:
+      cpu:
+        type: string
+      gpu:
+        type: string
+      ram:
+        type: string
+  software:
+    type: object
+    properties:
+      python:
+        type: string
+      mujoco:
+        type: string
+      gymnasium:
+        type: string
+      stable_baselines3:
+        type: string
+  comparison_versions:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - type
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+          enum: [baseline, reproduction, enhanced]
+        description:
+          type: string
+  metrics:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - unit
+        - direction
+        - values
+      properties:
+        name:
+          type: string
+        unit:
+          type: string
+        direction:
+          type: string
+          enum: [higher_better, lower_better]
+        values:
+          type: object
+          additionalProperties:
+            type: number
+        improvement_vs_baseline:
+          type: object
+          additionalProperties:
+            type: number
+            description: 相对 baseline 的提升百分比
+  verdict:
+    type: string
+    enum: [PASS, PASS_WITH_GAP, FAIL]
+  summary:
+    type: string

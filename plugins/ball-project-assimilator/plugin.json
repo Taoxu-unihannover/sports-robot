@@ -1,0 +1,46 @@
+{
+  "name": "ball-project-assimilator",
+  "version": "0.1.0",
+  "description": "球类机器人开源项目吸收与超越插件。扫描开源项目技术栈，沉淀为 sports-robot skills/recipes，复现项目性能，横向评测同类方法，组合最优技术栈形成超过原项目的增强方案。",
+  "author": {
+    "name": "SportsRobot"
+  },
+  "keywords": [
+    "ball-robot",
+    "project-assimilation",
+    "skill-distillation",
+    "benchmark",
+    "reproduction",
+    "best-stack",
+    "sports-robot"
+  ],
+  "category": "development",
+  "skills": [
+    "open-project-skill-distiller",
+    "stack-method-benchmark",
+    "best-stack-composer",
+    "mujoco-tennis-world-builder",
+    "gymnasium-mujoco-env-builder",
+    "sb3-rl-training-runner",
+    "mujoco-policy-evaluator",
+    "robot-trajectory-web-visualizer",
+    "truth-state-policy-input",
+    "sim-camera-perception-input",
+    "ball-project-distiller"
+  ],
+  "agents": [
+    "./agents/assimilation-architect.md",
+    "./agents/assimilation-developer.md",
+    "./agents/assimilation-reviewer.md"
+  ],
+  "recipes": [
+    "./recipes/generic-ball-project-assimilation",
+    "./recipes/dynamic-tennis-assimilation"
+  ],
+  "dependencies": {
+    "python": ">=3.10",
+    "pyyaml": ">=6.0",
+    "numpy": ">=1.21",
+    "pytest": ">=7.0"
+  }
+}

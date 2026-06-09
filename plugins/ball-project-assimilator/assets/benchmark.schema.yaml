@@ -1,0 +1,99 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: Benchmark
+description: 技术栈方法横向评测 schema
+type: object
+required:
+  - benchmark_date
+  - stack_name
+  - methods
+  - results
+properties:
+  benchmark_date:
+    type: string
+    format: date-time
+  stack_name:
+    type: string
+  benchmark_env:
+    type: string
+  seeds:
+    type: array
+    items:
+      type: integer
+  episodes_per_seed:
+    type: integer
+  metric_schema:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - unit
+        - direction
+      properties:
+        name:
+          type: string
+        unit:
+          type: string
+        direction:
+          type: string
+          enum: [higher_better, lower_better]
+        weight:
+          type: number
+  methods:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - source
+      properties:
+        name:
+          type: string
+        source:
+          type: string
+          enum: [project_a, sports_robot, hybrid]
+        skill:
+          type: string
+        config:
+          type: object
+  results:
+    type: array
+    items:
+      type: object
+      required:
+        - method_name
+        - metrics
+      properties:
+        method_name:
+          type: string
+        metrics:
+          type: object
+          additionalProperties:
+            type: object
+            properties:
+              mean:
+                type: number
+              std:
+                type: number
+              min:
+                type: number
+              max:
+                type: number
+              raw:
+                type: array
+                items:
+                  type: number
+  ranking:
+    type: array
+    items:
+      type: object
+      properties:
+        rank:
+          type: integer
+        method_name:
+          type: string
+        composite_score:
+          type: number
+        recommendation:
+          type: string
+          enum: [best, alternative, not_recommended]

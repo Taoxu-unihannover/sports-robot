@@ -1,0 +1,58 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: SkillGap
+description: Skill 缺口报告 schema
+type: object
+required:
+  - project_name
+  - total_modules
+  - covered_count
+  - partial_count
+  - uncovered_count
+  - items
+properties:
+  project_name:
+    type: string
+  total_modules:
+    type: integer
+  covered_count:
+    type: integer
+  partial_count:
+    type: integer
+  uncovered_count:
+    type: integer
+  coverage_rate:
+    type: number
+    description: 覆盖率 (covered + partial*0.5) / total
+  items:
+    type: array
+    items:
+      type: object
+      required:
+        - module_name
+        - module_type
+        - coverage
+      properties:
+        module_name:
+          type: string
+        module_type:
+          type: string
+          enum: [simulation, perception, modeling, control, execution, engineering]
+        coverage:
+          type: string
+          enum: [full, partial, none]
+        mapped_skill:
+          type: string
+        coverage_ratio:
+          type: number
+          description: 0.0 ~ 1.0
+        missing_parts:
+          type: array
+          items:
+            type: string
+        candidate_skill_name:
+          type: string
+        priority:
+          type: string
+          enum: [P0, P1, P2, P3]
+        notes:
+          type: string

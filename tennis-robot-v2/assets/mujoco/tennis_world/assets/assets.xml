@@ -1,0 +1,8 @@
+<mujocoinclude>
+    <compiler angle="radian" autolimits="true" meshdir="./meshes"/>
+    <statistic meansize="0.767828" extent="17.3945" center="-1.30273 -0.281443 0.819464"/>
+    <asset>
+        <texture name="texplane" type="2d" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 0.2 0.3" width="512" height="512"/>
+        <material name="MatGnd" reflectance="0.5" texture="texplane" texrepeat="1 1" texuniform="true"/>
+    </asset>
+</mujocoinclude>

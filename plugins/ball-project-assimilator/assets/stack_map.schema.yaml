@@ -1,0 +1,83 @@
+$schema: https://json-schema.org/draft/2020-12/schema
+title: StackMap
+description: 开源项目技术栈图谱 schema
+type: object
+required:
+  - project_name
+  - scan_date
+  - modules
+properties:
+  project_name:
+    type: string
+    description: 项目名称
+  project_path:
+    type: string
+    description: 项目本地路径
+  project_url:
+    type: string
+    description: 项目远程仓库地址
+  scan_date:
+    type: string
+    format: date-time
+  project_type:
+    type: string
+    enum: [tennis, badminton, pingpong, baseball, soccer, other]
+  language:
+    type: string
+  dependencies:
+    type: object
+    additionalProperties:
+      type: string
+  modules:
+    type: array
+    items:
+      type: object
+      required:
+        - name
+        - type
+        - source_files
+        - coverage
+      properties:
+        name:
+          type: string
+          description: 模块名称
+        type:
+          type: string
+          enum: [simulation, perception, modeling, control, execution, engineering]
+          description: 技术栈类型
+        source_files:
+          type: array
+          items:
+            type: string
+          description: 源文件路径列表
+        dependencies:
+          type: array
+          items:
+            type: string
+        inputs:
+          type: object
+          description: 输入 schema
+        outputs:
+          type: object
+          description: 输出 schema
+        metrics:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: number
+              unit:
+                type: string
+        mapped_skill:
+          type: string
+          description: 映射的 sports-robot skill 名称
+        coverage:
+          type: string
+          enum: [full, partial, none]
+        gap_description:
+          type: string
+        notes:
+          type: string

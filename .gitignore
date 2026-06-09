@@ -39,3 +39,15 @@ Thumbs.db
 data/
 output/
 logs/
+
+# Training artifacts
+saved_models/
+runs/
+evaluation_results/
+web_viz_data/
+
+# Model checkpoints
+*.zip
+
+# Reference docs (large)
+docs/tech-report/reference/

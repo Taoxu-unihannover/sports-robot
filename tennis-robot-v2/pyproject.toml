@@ -1,0 +1,21 @@
+[project]
+name = "tennis-robot-v2"
+version = "2.0.0"
+description = "Tennis robot navigation v2 - enhanced reproduction with predictive reward"
+requires-python = ">=3.10"
+dependencies = [
+    "gymnasium>=1.2.0",
+    "mujoco>=3.4.0",
+    "stable-baselines3>=2.7.0",
+    "torch>=2.3.0",
+    "numpy>=1.26.0",
+    "pyyaml>=6.0",
+    "matplotlib>=3.8",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "ruff"]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.backends._legacy:_Backend"

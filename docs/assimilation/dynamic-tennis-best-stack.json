@@ -1,0 +1,65 @@
+{
+  "project_name": "dynamic-tennis",
+  "baseline_source": "tennis-robot-v2",
+  "target_improvement": 0.05,
+  "stacks": [
+    {
+      "stack_name": "simulation",
+      "selected_skill": "mujoco-tennis-world-builder",
+      "selected_method": "mujoco-tennis-world-builder",
+      "source": "sports_robot",
+      "reason": "Best available method for this stack"
+    },
+    {
+      "stack_name": "perception",
+      "selected_skill": "sim-camera-perception-input",
+      "selected_method": "sim-camera-perception-input",
+      "source": "sports_robot",
+      "reason": "Best available method for this stack"
+    },
+    {
+      "stack_name": "modeling",
+      "selected_skill": "ball-flight-model",
+      "selected_method": "ball-flight-model",
+      "source": "sports_robot",
+      "reason": "Best available method for this stack"
+    },
+    {
+      "stack_name": "control",
+      "selected_skill": "mpc-controller",
+      "selected_method": "mpc-controller",
+      "source": "sports_robot",
+      "reason": "Best available method for this stack"
+    },
+    {
+      "stack_name": "execution",
+      "selected_skill": "mobile-base-executor",
+      "selected_method": "mobile-base-executor",
+      "source": "sports_robot",
+      "reason": "Best available method for this stack"
+    },
+    {
+      "stack_name": "training",
+      "selected_skill": "sb3-rl-training-runner",
+      "selected_method": "sb3-rl-training-runner",
+      "source": "sports_robot",
+      "reason": "Best available method for this stack"
+    },
+    {
+      "stack_name": "engineering",
+      "selected_skill": "robot-trajectory-web-visualizer",
+      "selected_method": "robot-trajectory-web-visualizer",
+      "source": "sports_robot",
+      "reason": "Best available method for this stack"
+    }
+  ],
+  "compatibility_check": {
+    "schema_compatible": true,
+    "frequency_compatible": true,
+    "latency_compatible": true,
+    "coordinate_system_compatible": true,
+    "units_compatible": true,
+    "safety_covered": true,
+    "conflicts": []
+  }
+}
