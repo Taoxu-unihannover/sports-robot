@@ -1,0 +1,74 @@
+<mujocoinclude>
+
+    <!-- Larger ground so robot can maneuver outside the court -->
+    <!-- Ground geom params should match contact pair for stability -->
+    <!-- Updated: timeconst=0.02 (20×timestep) and solimp=[0.8,0.85] for fast collision stability -->
+    <geom name="ground" pos="0 0 -0.01" rgba="0.25 0.26 0.25 1" size="28 28 2" type="plane"
+          contype="1" conaffinity="1"
+          margin="0.001"
+          friction="0.55 0.005 0.0001"
+          solref="0.02 0.09"
+          solimp="0.8 0.85 0.001 0.5 2" />
+
+    <!-- Goal visualization - Tennis Ball -->
+    <!-- ITF-like tennis ball: diameter ~6.7cm (radius 0.0335m), mass ~57g -->
+    <body name="goal_body" pos="0 0 0.0335">
+        <freejoint name="goal_joint"/>
+        <inertial pos="0 0 0" mass="0.057" diaginertia="0.0000256 0.0000256 0.0000256"/>
+        <!-- Tennis ball geom params should match contact pair for stability -->
+        <!-- Updated: timeconst=0.02 (20×timestep) and solimp=[0.8,0.85] for fast collision stability -->
+        <geom name="tennis_ball" size="0.0335" type="sphere" rgba="0.95 0.95 0.85 1.0"
+              contype="1" conaffinity="1"
+              margin="0.001"
+              friction="0.55 0.005 0.0001"
+              solref="0.02 0.09"
+              solimp="0.8 0.85 0.001 0.5 2"/>
+        <!-- 网球的白色表面和绿色线条 -->
+        <geom name="goal_lines" size="0.0342" type="sphere" rgba="0.0 0.8 0.0 0.3" contype="0" conaffinity="0" />
+    </body>
+
+    <!-- Tennis court visualization (singles dimensions: 23.77m x 8.23m) -->
+    <!-- court_surface: visual only, no collision -->
+    <geom name="court_surface" type="box" pos="0 0 0.001" size="4.115 11.885 0.001" rgba="0.13 0.31 0.52 0.95" contype="0" conaffinity="0"/>
+    <!-- 
+         court_collision: COMPLETELY DISABLED (contype="0" conaffinity="0")
+         - Originally intended for anti-tunneling, but causes double-contact issues
+         - Ball only collides with ground plane, which is sufficient
+         - CRITICAL: Both contype AND conaffinity must be 0 to prevent any collision
+    -->
+
+    <!-- Court lines -->
+    <geom name="line_baseline_near" type="box" pos="0 -11.885 0.003" size="4.115 0.02 0.001" rgba="1 1 1 1" contype="0" conaffinity="0"/>
+    <geom name="line_baseline_far"  type="box" pos="0 11.885 0.003"  size="4.115 0.02 0.001" rgba="1 1 1 1" contype="0" conaffinity="0"/>
+    <geom name="line_sideline_left"  type="box" pos="-4.115 0 0.003" size="0.02 11.885 0.001" rgba="1 1 1 1" contype="0" conaffinity="0"/>
+    <geom name="line_sideline_right" type="box" pos="4.115 0 0.003"  size="0.02 11.885 0.001" rgba="1 1 1 1" contype="0" conaffinity="0"/>
+    <geom name="line_center_service" type="box" pos="0 0 0.003" size="0.02 3.2 0.001" rgba="1 1 1 1" contype="0" conaffinity="0"/>
+    <geom name="line_service_near" type="box" pos="0 -6.4 0.003" size="4.115 0.02 0.001" rgba="1 1 1 1" contype="0" conaffinity="0"/>
+    <geom name="line_service_far"  type="box" pos="0 6.4 0.003"  size="4.115 0.02 0.001" rgba="1 1 1 1" contype="0" conaffinity="0"/>
+
+    <!-- Tennis net (ITF-like): width 10.97m, center height 0.914m, post height 1.07m -->
+    <!-- Semi-transparent net mesh panel -->
+    <geom name="tennis_net_mesh" type="box" pos="0 0 0.50" size="5.485 0.015 0.50" material="MatNetMesh" contype="1" conaffinity="1"/>
+    <!-- Top white band (with slight center sag) -->
+    <geom name="net_top_band_left" type="capsule" fromto="-5.485 0 1.07 0 0 0.914" size="0.025" rgba="1 1 1 1" contype="1" conaffinity="1"/>
+    <geom name="net_top_band_right" type="capsule" fromto="0 0 0.914 5.485 0 1.07" size="0.025" rgba="1 1 1 1" contype="1" conaffinity="1"/>
+    <!-- Bottom white edge -->
+    <geom name="net_bottom_band" type="box" pos="0 0 0.02" size="5.485 0.018 0.02" rgba="0.98 0.98 0.98 1" contype="1" conaffinity="1"/>
+    <!-- Center strap -->
+    <geom name="net_center_strap" type="box" pos="0 0 0.457" size="0.025 0.012 0.457" rgba="1 1 1 1" contype="1" conaffinity="1"/>
+    <!-- Posts -->
+    <geom name="net_post_left"  type="capsule" fromto="-5.485 0 0 -5.485 0 1.07" size="0.035" rgba="0.3 0.3 0.3 1" contype="1" conaffinity="1"/>
+    <geom name="net_post_right" type="capsule" fromto="5.485 0 0 5.485 0 1.07" size="0.035" rgba="0.3 0.3 0.3 1" contype="1" conaffinity="1"/>
+
+    <!-- Opponent racket (visual): ball is sampled near this racket and "hit" towards robot side -->
+    <body name="opponent_racket" pos="0 10.8 1.15">
+        <geom name="opponent_racket_face" type="box" pos="0 0 0" size="0.16 0.01 0.22" rgba="0.15 0.15 0.15 0.95" contype="0" conaffinity="0"/>
+        <geom name="opponent_racket_handle" type="capsule" fromto="0 0 -0.26 0 0 -0.52" size="0.02" rgba="0.55 0.36 0.2 1" contype="0" conaffinity="0"/>
+    </body>
+
+    <!-- Fixed side camera looking at court center and net -->
+    <camera name="court_cam_side" pos="0 -16 4.5" xyaxes="1 0 0 0 0 1"/>
+
+    <light cutoff="4.0" diffuse="1 1 1" dir="-0.9 -0.9 -2.5" directional="true" exponent="20" pos="0.9 0.9 2.5" specular="0 0 0" />
+
+</mujocoinclude>

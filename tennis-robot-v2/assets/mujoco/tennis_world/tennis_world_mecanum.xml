@@ -1,0 +1,11 @@
+<mujoco model="tennis_world_mecanum">
+    <include file="summit_xl_description/assets/assets.xml"/>
+    <option timestep="0.001" iterations="100"/>
+
+    <worldbody>
+        <include file="assets/scene.xml"/>
+        <include file="summit_xl_description/assets/summit_xls.urdf.xml"/>
+    </worldbody>
+
+    <include file="summit_xl_description/assets/summit_xls_actuator.xml"/>
+</mujoco>

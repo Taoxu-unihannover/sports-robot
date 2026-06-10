@@ -81,11 +81,11 @@ class TennisNavigationV2Env(MujocoEnv, utils.EzPickle):
         if xml_file is None:
             _env_dir = os.path.dirname(os.path.abspath(__file__))
             xml_file = os.path.normpath(os.path.join(
-                _env_dir, "..", "..", "assets", "mujoco", "tennis_world", "tennis_world.xml",
+                _env_dir, "..", "..", "assets", "mujoco", "tennis_world", "tennis_world_mecanum.xml",
             ))
             if not os.path.exists(xml_file):
                 xml_file = os.path.normpath(os.path.join(
-                    _env_dir, "..", "..", "..", "assets", "mujoco", "tennis_world", "tennis_world.xml",
+                    _env_dir, "..", "..", "..", "assets", "mujoco", "tennis_world", "tennis_world_mecanum.xml",
                 ))
 
         xml_file = _resolve_xml_path(xml_file)
@@ -147,17 +147,14 @@ class TennisNavigationV2Env(MujocoEnv, utils.EzPickle):
                 "wheel_torque_limit": 50.0,
             },
             "reward_scales": {
-                "control_cost": 0.0005,
+                "control_cost": 0.001,
                 "distance_incentive": 5000,
-                "velocity_alignment": 500,
-                "relative_speed": 20.0,
-                "step_penalty": -0.3,
                 "terminal_payoff": [-10000, 10000],
                 "inTimeCost": 100,
                 "grace_time_period": 5,
             },
             "navigation": {
-                "goal_tolerance": 0.5,
+                "goal_tolerance": 0.2,
                 "diagonal_length": 14.45,
                 "court_length": 11.885,
                 "court_width": 8.23,
@@ -306,14 +303,12 @@ class TennisNavigationV2Env(MujocoEnv, utils.EzPickle):
         curr_distance = self._distance(robot_pos, self.goal)
         if curr_distance <= self.goal_tolerance:
             self.reached = True
-        half_l = self.court_length / 2
-        half_w = self.court_width / 2
-        margin = 2.0
         rx, ry = robot_pos
-        robot_out = abs(rx) > half_w + margin or abs(ry) > half_l + margin
+        robot_out = abs(rx) > 8 or abs(ry) > 8
         tx, ty = self.goal
-        tennis_out = abs(tx) > half_w + margin or abs(ty) > half_l + margin
-        if robot_out or tennis_out:
+        tennis_out = abs(tx) > 8 or abs(ty) > 8
+        time_exceeded = self.step_count > self.config.get("mujoco", {}).get("max_steps", 1000)
+        if robot_out or tennis_out or time_exceeded:
             self.failed = True
 
     @property
@@ -327,30 +322,8 @@ class TennisNavigationV2Env(MujocoEnv, utils.EzPickle):
     def _compute_reward(self, action):
         robot_pos = self.data.qpos[7:9].copy()
         curr_distance = self._distance(robot_pos, self.goal)
-        distance_reward = self.config["reward_scales"]["distance_incentive"] * (self.prev_distance - curr_distance)
-
-        robot_vel = self.data.qvel[6:8].copy()
-        predictive_target = self._get_predictive_target()
-        target_direction = predictive_target - robot_pos
-        target_distance = np.linalg.norm(target_direction)
-        if target_distance > 0:
-            target_direction_norm = target_direction / target_distance
-        else:
-            target_direction_norm = np.array([0.0, 0.0])
-
-        velocity_alignment = np.dot(robot_vel, target_direction_norm)
-        velocity_alignment_reward = velocity_alignment * self.config["reward_scales"].get("velocity_alignment", 500.0)
-
-        relative_speed_reward = 0
-        relative_velocity = robot_vel - self.tennis_velocity
-        if self.tennis_velocity[1] < 0:
-            predictive_distance = np.linalg.norm(predictive_target - robot_pos)
-            if predictive_distance < 3.0:
-                relative_speed = np.linalg.norm(relative_velocity)
-                relative_speed_reward = relative_speed * self.config["reward_scales"].get("relative_speed", 20.0)
-
-        control_cost = -self.config["reward_scales"].get("control_cost", 0.0005) * np.sum(np.abs(self.data.ctrl[:4]))
-        step_penalty = self.config["reward_scales"].get("step_penalty", -0.3)
+        distance_rate = self.prev_distance - curr_distance
+        distance_reward = self.config["reward_scales"]["distance_incentive"] * distance_rate
 
         payoff = 0
         if self.failed:
@@ -358,19 +331,13 @@ class TennisNavigationV2Env(MujocoEnv, utils.EzPickle):
         elif self.reached:
             payoff = max(self.config["reward_scales"]["terminal_payoff"])
 
+        control_cost = -self.config["reward_scales"].get("control_cost", 0.001) * np.sum(np.square(action))
+
         in_time_cost = 0
         if self.reached:
             in_time_cost = float(self.config["reward_scales"]["inTimeCost"]) * (self.t_accepted - self.data.time)
 
-        total_reward = (
-            distance_reward
-            + velocity_alignment_reward
-            + relative_speed_reward
-            + control_cost
-            + step_penalty
-            + payoff
-            + in_time_cost
-        )
+        total_reward = distance_reward + payoff + control_cost + in_time_cost
 
         self.prev_distance = curr_distance
         return total_reward
@@ -439,12 +406,13 @@ class TennisNavigationV2Env(MujocoEnv, utils.EzPickle):
         if max_val > 1.0:
             wheel_commands /= max_val
 
-        actual_torques = wheel_commands * self.wheel_torque_limit
+        max_wheel_speed = 50.0
+        wheel_speeds = wheel_commands * max_wheel_speed
         ctrl = self.data.ctrl.copy()
-        ctrl[0] = actual_torques[1]
-        ctrl[1] = actual_torques[0]
-        ctrl[2] = actual_torques[3]
-        ctrl[3] = actual_torques[2]
+        ctrl[0] = wheel_speeds[1]
+        ctrl[1] = wheel_speeds[0]
+        ctrl[2] = wheel_speeds[3]
+        ctrl[3] = wheel_speeds[2]
 
         self.do_simulation(ctrl, self.frame_skip)
 

@@ -162,7 +162,7 @@ def get_existing_skills(skills_dir):
 def build_stack_map(project_path, project_name, project_url, domain):
     """Build complete stack map for a project."""
     files = scan_directory(project_path)
-    project_root = Path(project_path).parent.parent
+    project_root = Path(project_path).parent
     skills_dir = os.path.join(str(project_root), "skills")
     existing_skills = get_existing_skills(skills_dir)
 

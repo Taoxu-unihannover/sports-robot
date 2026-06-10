@@ -1,0 +1,33 @@
+{
+  "eval_date": "2026-06-10T02:16:14",
+  "seeds": [
+    0,
+    42,
+    123
+  ],
+  "episodes_per_seed": 10,
+  "baseline": {
+    "label": "Baseline",
+    "num_episodes": 30,
+    "success_rate": 0.9333333333333333,
+    "avg_reward": 35.01747958115094,
+    "std_reward": 16.60860489144485,
+    "avg_steps": 346.8666666666667
+  },
+  "reproduction": {
+    "label": "Reproduction",
+    "num_episodes": 30,
+    "success_rate": 0.4666666666666667,
+    "avg_reward": 16.416984766674712,
+    "std_reward": 20.935423350825737,
+    "avg_steps": 365.3333333333333
+  },
+  "enhanced": {
+    "label": "Enhanced",
+    "num_episodes": 30,
+    "success_rate": 0.43333333333333335,
+    "avg_reward": 9.314386535095329,
+    "std_reward": 23.476819290102704,
+    "avg_steps": 393.6
+  }
+}

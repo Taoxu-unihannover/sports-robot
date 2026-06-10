@@ -1,0 +1,38 @@
+<mujoco model="summit_xls">
+    <include file="assets/assets.xml"/>
+    <option timestep="0.001" iterations="100"/>
+    
+    <worldbody>
+        <include file="assets/basic_scene.xml" />    
+        <include file="assets/summit_xls.urdf.xml" />    
+    </worldbody>
+
+    <!--
+        Tennis ball / ground contact — derived from COR formula:
+          COR ≈ exp(-π × dampratio / sqrt(1 - dampratio²))
+        For COR = 0.75 (ITF standard on hard court):
+          dampratio ≈ 0.09
+        timeconst: For fast collisions (4m/s+), use ≥ 10×timestep (0.001) → 0.01 chosen (10×).
+                   This prevents numerical instability that can cause energy gain.
+        solimp: Reduced from [0.9, 0.95] to [0.85, 0.90] to avoid over-stiffening
+                that can lead to energy increase in fast collisions.
+        friction: ITF hard court ≈ 0.55 (tangential).
+    -->
+    <contact>
+        <!-- 
+            Fixed collision parameters to prevent energy gain:
+            - timeconst=0.02 (20×timestep) for better stability with fast collisions
+            - dampratio=0.09 (COR≈0.75)
+            - solimp: softer constraints [0.8, 0.85] to prevent numerical instability
+            - margin: removed from pair (uses geom margin instead)
+        -->
+        <pair geom1="tennis_ball" geom2="ground"
+              friction="0.55 0.005 0.0001"
+              solref="0.02 0.09"
+              solimp="0.8 0.85 0.001 0.5 2"/>
+    </contact>
+
+    <include file = 'assets/summit_xls_actuator.xml' />
+</mujoco>
+
+

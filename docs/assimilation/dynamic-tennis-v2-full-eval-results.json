@@ -1,0 +1,61 @@
+{
+  "eval_date": "2026-06-10T19:36:13",
+  "seeds": [
+    0,
+    42,
+    123
+  ],
+  "episodes_per_seed": 10,
+  "timesteps": 30000000,
+  "baseline_sim": {
+    "label": "Baseline-sim",
+    "num_episodes": 30,
+    "success_rate": 0.9333333333333333,
+    "avg_reward": 35.01747958115094,
+    "std_reward": 16.60860489144485,
+    "avg_steps": 346.8666666666667
+  },
+  "baseline_real": {
+    "label": "Baseline-real",
+    "num_episodes": 30,
+    "success_rate": 0.06666666666666667,
+    "avg_reward": -19.942643289374352,
+    "std_reward": 19.079658319898577,
+    "avg_steps": 415.6666666666667,
+    "avg_detection_rate": 0.991966945638098
+  },
+  "reproduction_sim": {
+    "label": "Reproduction-sim",
+    "num_episodes": 30,
+    "success_rate": 0.43333333333333335,
+    "avg_reward": 11.540865208775873,
+    "std_reward": 21.759451069326865,
+    "avg_steps": 377.6666666666667
+  },
+  "reproduction_real": {
+    "label": "Reproduction-real",
+    "num_episodes": 30,
+    "success_rate": 0.0,
+    "avg_reward": -30.307851381331556,
+    "std_reward": 20.603876778478995,
+    "avg_steps": 410.76666666666665,
+    "avg_detection_rate": 0.9906223690088992
+  },
+  "enhanced_sim": {
+    "label": "Enhanced-sim",
+    "num_episodes": 30,
+    "success_rate": 0.8666666666666667,
+    "avg_reward": 32.68205596922573,
+    "std_reward": 16.782905798320776,
+    "avg_steps": 346.6666666666667
+  },
+  "enhanced_real": {
+    "label": "Enhanced-real",
+    "num_episodes": 30,
+    "success_rate": 0.06666666666666667,
+    "avg_reward": -30.634078329459506,
+    "std_reward": 34.31390091154604,
+    "avg_steps": 412.3333333333333,
+    "avg_detection_rate": 0.9916012896051807
+  }
+}
