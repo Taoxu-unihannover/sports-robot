@@ -34,6 +34,7 @@
     "./agents/assimilation-reviewer.md"
   ],
   "recipes": [
+    "./recipes/simple-reproduction",
     "./recipes/generic-ball-project-assimilation",
     "./recipes/dynamic-tennis-assimilation"
   ],

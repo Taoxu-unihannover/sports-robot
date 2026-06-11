@@ -181,40 +181,23 @@
 
 | Plugin | 任务1使用 | 任务2使用 | 冲突类型 | 说明 |
 |---|---|---|---|---|
-| `ball-project-distiller` | ✅ | - | 无 | 任务1新增，专注自举 |
-| `ball-project-assimilator` | - | ✅ | ⚠️ 功能重叠 | 任务2新增，专注吸收超越 |
+| `ball-project-distiller` | ✅ | - | ~~已合并~~ | ~~功能与 ball-project-assimilator 重叠，已于 2026-06-11 合并到 ball-project-assimilator~~ |
+| `ball-project-assimilator` | - | ✅ | 无 | 任务2新增，已整合简化版复现功能（原 ball-project-distiller） |
 | `ball-engineering` | ✅ | ✅ | 无 | 通用能力，无冲突 |
 | `ball-control` | ✅ | ✅ | 无 | 通用能力，无冲突 |
 | `ball-perception` | ✅ | ✅ | 无 | 通用能力，无冲突 |
 | `ball-modeling` | ✅ | ✅ | 无 | 通用能力，无冲突 |
 
-**发现**：存在功能重叠
-
-| 对比维度 | ball-project-distiller | ball-project-assimilator |
-|---|---|---|
-| **目标** | 从已有球类项目抽取能力并自举新项目 | 吸收开源项目、复现、超越 |
-| **工作流** | 项目分析 → 技能提取 → 项目自举 | 项目分析 → 技术栈拆解 → 复现 → 横向评测 → 超越 |
-| **输出** | skills/plugins + 自举项目 | 复现报告 + 横向评测报告 + 超越报告 |
-| **循环** | 自举循环 | 四阶段循环（更长） |
-| **超越能力** | 无 | 有 |
-
-**建议**：将 `ball-project-distiller` 作为 `ball-project-assimilator` 的简化版本（只有阶段1-2），或合并两者。
+**已解决**：2026-06-11 执行方案A，将 `ball-project-distiller` 的功能合并到 `ball-project-assimilator`。
 
 ### 4.3 优化建议
 
-#### 建议 1：合并 ball-project-distiller 和 ball-project-assimilator
+#### ✅ 已完成：合并 ball-project-distiller 和 ball-project-assimilator
 
-`ball-project-distiller` 可以作为 `ball-project-assimilator` 的子集存在：
-
-```
-ball-project-assimilator
-├── recipes/
-│   ├── simple-reproduction/     # 原 ball-project-distiller 的简化流程
-│   │   └── RECIPE.md
-│   └── full-assimilation/       # 完整的吸收+超越流程
-│       └── RECIPE.md
-└── skills/                      # 复用 open-project-skill-distiller 等
-```
+- 将 `ball-project-distiller` 的 `distill.py` 脚本整合到 `ball-project-assimilator/scripts/distill.py`
+- 新增 `recipes/simple-reproduction/` 作为简化版复现流程
+- 更新 `quickstart.md` 和 `AGENTS.md` 支持双模式（简化版/完整版）
+- 删除 `plugins/ball-project-distiller/` 目录
 
 #### 建议 2：Skills 与 Plugins 职责分离
 
@@ -294,25 +277,24 @@ ball-project-assimilator
 
 ### 6.2 Skills 和 Plugins 状态
 
-| 类型 | 数量 | 冲突数 | 建议优化数 |
-|---|---|---|---|
-| Skills | 31 | 0 | 3 |
-| Plugins | 7 | 1 | 2 |
+| 类型 | 数量 | 冲突数 | 已解决 | 建议优化数 |
+|---|---|---|---|---|
+| Skills | 31 | 0 | - | 2 |
+| Plugins | 6 | 1 | ✅ 1 | 1 |
 
 ### 6.3 优化建议优先级
 
-| 优先级 | 优化项 | 说明 |
-|---|---|---|
-| P0 | 增加 tennis-robot-v2 训练步数至 30M | 达到与 baseline 可比的训练量 |
-| P0 | 合并 ball-project-distiller 和 ball-project-assimilator | 消除功能重叠 |
-| P1 | 统一 skills 命名规范 | 提高可发现性 |
-| P1 | 建立性能评估-优化迭代循环 | 指导超越目标实现 |
-| P2 | 泛化到其他球类机器人项目 | 验证框架通用性 |
+| 优先级 | 优化项 | 状态 | 说明 |
+|---|---|---|---|
+| ✅ P0 | 合并 ball-project-distiller 和 ball-project-assimilator | **已完成** | 2026-06-11 合并到 ball-project-assimilator |
+| P1 | 统一 skills 命名规范 | 待进行 | 提高可发现性 |
+| P1 | 建立性能评估-优化迭代循环 | 待进行 | 指导超越目标实现 |
+| P2 | 泛化到其他球类机器人项目 | 待进行 | 验证框架通用性 |
 
 ### 6.4 下一步行动
 
-1. **立即**：将 tennis-robot-v2 训练步数提升至 30M，验证复现版性能
-2. **本周**：合并 ball-project-distiller 和 ball-project-assimilator
+1. ~~合并 ball-project-distiller 和 ball-project-assimilator~~ ✅ **已完成**
+2. **本周**：统一 skills 命名规范
 3. **本周**：建立性能评估-优化迭代循环
 4. **长期**：泛化到其他球类机器人项目验证框架
 

@@ -40,3 +40,5 @@
   "model": "claude-fable-5",
   "skipDangerousModePermissionPrompt": true
 }
+
+claude --session 0dc51f71-17ae-48be-ae2e-ab49ddeda40d --dangerously-skip-permissions
