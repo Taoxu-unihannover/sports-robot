@@ -150,11 +150,11 @@ tennis-robot 18.5 steps/sec vs dynamic-tennis 19.9 steps/sec。
 
 | 优先级 | 优化项 | 归因 skill | 状态 |
 |---|---|---|---|
-| P0 | 奖励函数调优 | gymnasium-mujoco-env-builder | 待实施 |
-| P0 | 网球初始状态对齐 | gymnasium-mujoco-env-builder | 待实施 |
-| P1 | 中文路径性能优化 | mujoco-tennis-world-builder | 待实施 |
+| P0 | 奖励函数调优 | gymnasium-env-builder | 待实施 |
+| P0 | 网球初始状态对齐 | gymnasium-env-builder | 待实施 |
+| P1 | 中文路径性能优化 | mujoco-world-builder | 待实施 |
 | P1 | 长训练验证 (15000 steps) | sb3-rl-training-runner | 待实施 |
-| P2 | 感知闭环测试 | sim-camera-perception-input | 待实施 |
+| P2 | 感知闭环测试 | sim-camera-input | 待实施 |
 
 ## 6. 自举 skills/plugins 清单
 
@@ -162,13 +162,13 @@ tennis-robot 18.5 steps/sec vs dynamic-tennis 19.9 steps/sec。
 
 | Skill | 用途 |
 |---|---|
-| mujoco-tennis-world-builder | 生成 MuJoCo 网球世界 XML |
-| gymnasium-mujoco-env-builder | 生成 Gymnasium 导航环境 |
+| mujoco-world-builder | 生成 MuJoCo 网球世界 XML |
+| gymnasium-env-builder | 生成 Gymnasium 导航环境 |
 | sb3-rl-training-runner | 生成 SB3 训练入口 |
 | mujoco-policy-evaluator | 生成评估脚本 |
-| robot-trajectory-web-visualizer | 生成 Web 可视化 |
+| trajectory-visualizer | 生成 Web 可视化 |
 | truth-state-policy-input | 生成真值状态观测 |
-| sim-camera-perception-input | 生成仿真相机模块 |
+| sim-camera-input | 生成仿真相机模块 |
 
 ### 使用的 plugins (1个)
 

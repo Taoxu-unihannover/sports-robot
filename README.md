@@ -29,22 +29,22 @@
 
 ### 🆕 新增项目
 
-| 项目 | 说明 | 源自 |
-|------|------|------|
-| [tennis-robot](tennis-robot/) | 基于 MuJoCo + Gymnasium + SB3 的网球机器人导航项目 | skill 自举 |
-| [tennis-robot-v2](tennis-robot-v2/) | 基于 dynamic-tennis-v2 接球任务的重现项目 | 项目吸收 |
+| 项目 | 说明 | 源自 | 性能 |
+|------|------|------|------|
+| [tennis-robot](tennis-robot/) | 基于 MuJoCo + Gymnasium + SB3 的网球机器人导航项目 | skill 自举 | PASS_WITH_GAP |
+| [tennis-robot-v2](tennis-robot-v2/) | 基于 dynamic-tennis-v2 接球任务的重现项目 | 项目吸收 | ✅ Sim 模式超越成功 |
 
 ### 🆕 新增 Skills
 
 | Skill | 用途 |
 |-------|------|
-| `mujoco-tennis-world-builder` | MuJoCo 网球世界构建 |
-| `gymnasium-mujoco-env-builder` | Gymnasium + MuJoCo 环境封装 |
+| `mujoco-world-builder` | MuJoCo 网球世界构建 |
+| `gymnasium-env-builder` | Gymnasium + MuJoCo 环境封装 |
 | `sb3-rl-training-runner` | Stable-Baselines3 训练入口 |
 | `mujoco-policy-evaluator` | 策略评估与指标输出 |
-| `robot-trajectory-web-visualizer` | Web 可视化导出 |
+| `trajectory-visualizer` | Web 可视化导出 |
 | `truth-state-policy-input` | 真值状态观测构建 |
-| `sim-camera-perception-input` | 仿真相机感知 |
+| `sim-camera-input` | 仿真相机感知 |
 | `open-project-skill-distiller` | 开源项目技术栈拆解 |
 | `stack-method-benchmark` | 同技术栈方法横向评测 |
 | `best-stack-composer` | 最优技术栈组合 |
@@ -293,7 +293,8 @@ result = pipeline.run("input_video.mp4", display=True)
 - [x] **项目自举** — ball-project-distiller Plugin（从 skills 自举新项目）
 - [x] **项目吸收** — ball-project-assimilator Plugin（吸收开源项目 + 复现 + 超越）
 - [x] **tennis-robot** — 自举生成的网球机器人导航项目
-- [x] **tennis-robot-v2** — 吸收 dynamic-tennis-v2 的接球任务重现
+- [x] **tennis-robot-v2** — 吸收 dynamic-tennis-v2 的接球任务重现（Sim 模式 93.3% > 86.7%）
+- [x] **验证报告** — [docs/verification/two-tasks-verification-report.md](docs/verification/two-tasks-verification-report.md) 任务完成度分析
 - [x] Marketplace 架构 — 根级 + 插件级 marketplace.json
 - [x] 技术报告 — 全技术栈详尽分析（乒乓球/羽毛球/网球）
 

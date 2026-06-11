@@ -134,11 +134,11 @@ python -m tennis_robot.visualization.web.server --port 8080
 
 本项目由以下 sports-robot skills/plugins 生成：
 
-- `mujoco-tennis-world-builder` — MuJoCo 网球世界
-- `gymnasium-mujoco-env-builder` — Gymnasium 环境封装
+- `mujoco-world-builder` — MuJoCo 网球世界
+- `gymnasium-env-builder` — Gymnasium 环境封装
 - `sb3-rl-training-runner` — SB3 训练入口
 - `mujoco-policy-evaluator` — 策略评估
-- `robot-trajectory-web-visualizer` — Web 可视化
+- `trajectory-visualizer` — Web 可视化
 - `truth-state-policy-input` — 真值状态观测
-- `sim-camera-perception-input` — 仿真相机感知
+- `sim-camera-input` — 仿真相机感知
 - `ball-project-distiller` — 项目能力抽取
