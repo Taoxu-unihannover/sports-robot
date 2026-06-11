@@ -8,6 +8,21 @@ import tempfile
 import yaml
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# Real mode perception imports (absorbed from dynamic-tennis-v2)
+# ─────────────────────────────────────────────────────────────────────────────
+try:
+    from tennis_robot_v2.perception.real_mode_perception import (
+        TennisRobotV2ObsBuilder,
+        SimBallDetector,
+        StereoDepthEstimator,
+        ObjectKalmanFilter,
+    )
+    PERCEPTION_AVAILABLE = True
+except ImportError:
+    PERCEPTION_AVAILABLE = False
+
+
 def _resolve_xml_path(xml_file):
     xml_file = os.path.normpath(xml_file)
     if not os.path.exists(xml_file):
@@ -120,6 +135,13 @@ class TennisNavigationV2Env(MujocoEnv, utils.EzPickle):
         self.t_accepted = 0.0
         self.datatoplot = {}
 
+        # ── Real mode perception support (absorbed from dynamic-tennis-v2) ──
+        self.obs_mode = "sim"  # "sim" = truth state, "real" = image-based
+        self.obs_builder = None
+        self.camera_renderer = None
+        self.cam1_id = -1
+        self.cam2_id = -1
+
         utils.EzPickle.__init__(self, xml_file, frame_skip, render_mode, config=config, **kwargs)
 
         MujocoEnv.__init__(
@@ -130,6 +152,10 @@ class TennisNavigationV2Env(MujocoEnv, utils.EzPickle):
             render_mode=render_mode,
             **kwargs,
         )
+
+        # Initialize real mode after MujocoEnv is ready
+        if PERCEPTION_AVAILABLE:
+            self._init_real_mode()
 
         self.metadata["render_fps"] = int(np.round(1.0 / self.dt))
         self.action_space = spaces.Box(low=-1, high=1, shape=(3,), dtype=np.float64)
@@ -169,6 +195,114 @@ class TennisNavigationV2Env(MujocoEnv, utils.EzPickle):
                 "max_steps": 1000,
             },
         }
+
+    def _init_real_mode(self):
+        """Initialize real-mode perception components (absorbed from dynamic-tennis-v2)."""
+        config = {
+            "obs_mode": "real",
+            "v_max_x": self.max_v,
+            "v_max_y": self.max_v,
+            "w_max": self.max_w,
+            "court_diagonal": self.diagonal_length,
+        }
+        self.obs_builder = TennisRobotV2ObsBuilder(config)
+
+        # Initialize camera renderer for real mode
+        self._init_camera_renderer()
+
+    def _init_camera_renderer(self):
+        """Initialize MuJoCo renderer for binocular cameras."""
+        try:
+            # Try to find camera IDs first (box_cam1/2 from cargo_box in summit_xls)
+            try:
+                self.cam1_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_CAMERA, "box_cam1")
+            except Exception:
+                self.cam1_id = -1
+            try:
+                self.cam2_id = mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_CAMERA, "box_cam2")
+            except Exception:
+                self.cam2_id = -1
+
+            if self.cam1_id < 0 or self.cam2_id < 0:
+                print(f"[RealMode] Cameras not found: cam1={self.cam1_id}, cam2={self.cam2_id}")
+                self.camera_renderer = None
+                return
+
+            # Try to increase framebuffer size by modifying the model visual config
+            # This is a workaround for MuJoCo's framebuffer limitation
+            if hasattr(self.model, 'vis') and hasattr(self.model.vis, 'global'):
+                self.model.vis.global_.offwidth = 1920
+                self.model.vis.global_.offheight = 1080
+
+            # Try with smaller resolution first
+            try:
+                self.camera_renderer = mujoco.Renderer(self.model, height=480, width=640)
+                print(f"[RealMode] Camera renderer ready (640x480): cam1_id={self.cam1_id}, cam2_id={self.cam2_id}")
+            except Exception as e1:
+                # If that fails, try with minimal resolution
+                try:
+                    self.camera_renderer = mujoco.Renderer(self.model, height=240, width=320)
+                    print(f"[RealMode] Camera renderer ready (320x240): cam1_id={self.cam1_id}, cam2_id={self.cam2_id}")
+                except Exception as e2:
+                    raise Exception(f"Both resolutions failed: 640x480: {e1}, 320x240: {e2}")
+
+        except Exception as e:
+            print(f"[RealMode] Camera renderer init failed: {e}")
+            self.camera_renderer = None
+            self.cam1_id = -1
+            self.cam2_id = -1
+
+    def set_obs_mode(self, mode: str):
+        """
+        Set observation mode.
+
+        Args:
+            mode: "sim" for truth state, "real" for image-based perception
+        """
+        if mode not in ("sim", "real"):
+            raise ValueError(f"Invalid obs_mode: {mode}. Must be 'sim' or 'real'")
+
+        if mode == "real" and not PERCEPTION_AVAILABLE:
+            print("[RealMode] Perception module not available, falling back to sim mode")
+            mode = "sim"
+
+        self.obs_mode = mode
+        if self.obs_mode == "real" and self.obs_builder is None:
+            self._init_real_mode()
+        if self.obs_builder is not None:
+            self.obs_builder.reset()
+
+    def render_binocular(self):
+        """
+        Render binocular camera images for real mode perception.
+
+        Returns:
+            (cam1_rgb, cam2_rgb) tuple or None if rendering fails
+        """
+        if self.camera_renderer is None or self.cam1_id < 0 or self.cam2_id < 0:
+            return None
+
+        try:
+            self.camera_renderer.update_scene(self.data, self.cam1_id)
+            img1 = self.camera_renderer.render()
+            self.camera_renderer.update_scene(self.data, self.cam2_id)
+            img2 = self.camera_renderer.render()
+
+            # Combine side by side if needed
+            h = min(img1.shape[0], img2.shape[0])
+            img1 = img1[:h]
+            img2 = img2[:h]
+            combined = np.concatenate((img1, img2), axis=1)
+
+            # Split into left and right cameras
+            half_w = combined.shape[1] // 2
+            cam1_rgb = combined[:, :half_w]
+            cam2_rgb = combined[:, half_w:]
+
+            return cam1_rgb, cam2_rgb
+        except Exception as e:
+            print(f"[RealMode] Binocular render failed: {e}")
+            return None
 
     def _quat_to_euler(self, quat):
         x, y, z, w = quat
@@ -387,6 +521,10 @@ class TennisNavigationV2Env(MujocoEnv, utils.EzPickle):
             + self.config["reward_scales"]["grace_time_period"]
         )
 
+        # Reset real-mode perception
+        if self.obs_mode == "real" and self.obs_builder is not None:
+            self.obs_builder.reset()
+
         return self._get_obs()
 
     def step(self, action):
@@ -423,12 +561,24 @@ class TennisNavigationV2Env(MujocoEnv, utils.EzPickle):
         self._check_termination()
         reward = self._compute_reward(action)
 
-        observation = self._get_obs()
+        # Build observation based on mode
+        if self.obs_mode == "real" and self.obs_builder is not None:
+            camera_frames = self.render_binocular()
+            if camera_frames is not None:
+                observation = self.obs_builder.build_real(self, camera_frames)
+            else:
+                observation = self._get_obs()
+        else:
+            observation = self._get_obs()
+
         terminated = self.terminated
         truncated = self.truncated
         info = self._get_info()
         info["total_reward"] = reward
         info["is_success"] = terminated
+        info["obs_mode"] = self.obs_mode
+        if self.obs_mode == "real" and self.obs_builder is not None:
+            info["ball_detected"] = self.obs_builder.ball_detected
         self.datatoplot = info
 
         return observation, reward, terminated, truncated, info

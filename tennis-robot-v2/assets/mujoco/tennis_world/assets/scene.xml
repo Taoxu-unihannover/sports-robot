@@ -3,8 +3,9 @@
 
     <body name="goal_body" pos="0 0 0.067">
         <freejoint name="goal_joint"/>
-        <geom name="goal_ball" size="0.067" type="sphere" rgba="0.9 0.9 0.9 1.0" contype="1" conaffinity="1"/>
-        <geom name="goal_lines" size="0.068" type="sphere" rgba="0.0 0.8 0.0 0.3" contype="0" conaffinity="0"/>
+        <!-- Tennis ball: bright vivid green, larger for better camera detection -->
+        <geom name="goal_ball" size="0.085" type="sphere" rgba="0.0 1.0 0.0 1.0" contype="1" conaffinity="1"/>
+        <geom name="goal_lines" size="0.086" type="sphere" rgba="0.0 0.8 0.0 0.3" contype="0" conaffinity="0"/>
     </body>
 
     <body name="corner_bl" pos="-4.115 -5.9425 0.01">
@@ -24,5 +25,9 @@
         <geom size="0.05 0.01 0.005" type="box" rgba="1.0 0.0 0.0 0.6" contype="0" conaffinity="0"/>
     </body>
 
-    <light cutoff="4.0" diffuse="1 1 1" dir="-0.9 -0.9 -2.5" directional="true" exponent="20" pos="0.9 0.9 2.5" specular="0 0 0"/>
+    <!-- High-intensity lighting for camera visibility - bright tennis court -->
+    <light cutoff="50.0" diffuse="3.0 3.0 3.0" dir="-0.5 -0.5 -1.0" directional="true" exponent="2" pos="5 5 20" specular="0.8 0.8 0.8"/>
+    <light cutoff="50.0" diffuse="2.5 2.5 2.5" dir="0.5 0.5 -1.0" directional="true" exponent="2" pos="-5 5 20" specular="0.6 0.6 0.6"/>
+    <light cutoff="50.0" diffuse="2.0 2.0 2.0" dir="0 0 -1.0" directional="false" exponent="5" pos="0 0 15" specular="0.5 0.5 0.5"/>
+    <light cutoff="30.0" diffuse="1.5 1.5 1.5" dir="0 0.5 -1.0" directional="false" exponent="10" pos="0 2 10" specular="0.3 0.3 0.3"/>
 </mujocoinclude>

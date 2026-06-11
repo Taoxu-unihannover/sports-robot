@@ -14,3 +14,29 @@
 在吸收开源项目时，需要考虑这些步骤（项目分析->流程拆解->技能及插件的提取->技能及插件的合并或新建->技能及插件的测试）
 在复现和超越开源项目时，可以参考这些步骤（环境配置->基于sports-robot的技能及插件的项目设计->项目实现->功能测试->性能评估->性能优化->文档生成与更新），其中性能优化主要针对超越开源项目的目的，性能优化与性能评估可以设计一个迭代循环，指导超越开源项目达到指定的目标（如达到1.3x开源项目原有性能）。
 最后根据新实现的功能更新readme
+
+
+      2    "env": {
+      3 -    "ANTHROPIC_AUTH_TOKEN": "sk-IX3qC7nIDRHmWhRBj1sPmzb9Yuh4M0ebDQsdrScHHbEbRfyE",                                                                                                   
+      4 -    "ANTHROPIC_BASE_URL": "https://rsxermu666.cn",                                                                                                                                   
+      5 -    "ANTHROPIC_MODEL": "claude-fable-5",                                                                                                                                             
+      6 -    "ANTHROPIC_SMALL_FAST_MODEL": "claude-fable-5"                                                                                                                                   
+      3 +    "ANTHROPIC_AUTH_TOKEN": "sk-e6983a31d5c64ddebdac10fdf514e162",                                                                                                                   
+      4 +    "ANTHROPIC_BASE_URL": "https://opencode.cn/v1",                                                                                                                                  
+      5 +    "ANTHROPIC_MODEL": "glm-5",                                                                                                                                                      
+      6 +    "ANTHROPIC_SMALL_FAST_MODEL": "glm-5"                                                                                                                                            
+      7    },
+
+{
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "sk-IX3qC7nIDRHmWhRBj1sPmzb9Yuh4M0ebDQsdrScHHbEbRfyE",
+    "ANTHROPIC_BASE_URL": "https://rsxermu666.cn",
+    "ANTHROPIC_MODEL": "claude-fable-5",
+    "ANTHROPIC_SMALL_FAST_MODEL": "claude-fable-5"
+  },
+  "permissions": {
+    "defaultMode": "bypassPermissions"
+  },
+  "model": "claude-fable-5",
+  "skipDangerousModePermissionPrompt": true
+}

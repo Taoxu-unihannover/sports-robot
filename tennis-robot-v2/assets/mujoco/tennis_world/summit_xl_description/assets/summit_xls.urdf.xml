@@ -282,9 +282,9 @@
             <!-- four thin walls, length/width/height = 0.03m, wall thickness 0.002m -->
             <geom type="box" pos="0.0 0.16 0.10" size="0.15 0.01 0.10" rgba="0 1 0 1" contype="1" conaffinity="1"/>
             <geom type="box" pos="0.0 -0.16 0.10" size="0.15 0.01 0.10" rgba="0 1 0 1" contype="1" conaffinity="1"/>
-            <!-- camera facing outward from -Y wall -->
-            <camera name="box_cam1" pos="-0.12 -0.18 0.18" xyaxes="-1 0 0 0 0 1"/>
-            <camera name="box_cam2" pos="0.12 -0.18 0.18" xyaxes="-1 0 0 0 0 1"/>
+            <!-- camera facing forward +Y (toward tennis court to see approaching ball) -->
+            <camera name="box_cam1" pos="-0.12 -0.18 0.18" xyaxes="1 0 0  0 0 1"/>
+            <camera name="box_cam2" pos="0.12 -0.18 0.18" xyaxes="1 0 0  0 0 1"/>
             <!-- red sphere marker to visualize camera location -->
             <geom type="sphere" size="0.02" pos="-0.12 -0.18 0.18" rgba="1 0 0 1" contype="0" conaffinity="0"/>
             <geom type="sphere" size="0.02" pos="0.12 -0.18 0.18" rgba="1 0 0 1" contype="0" conaffinity="0"/>

@@ -1,10 +1,14 @@
 <mujoco model="tennis_world_mecanum">
     <include file="summit_xl_description/assets/assets.xml"/>
+    <visual>
+        <global offwidth="1920" offheight="1080"/>
+    </visual>
     <option timestep="0.001" iterations="100"/>
 
     <worldbody>
         <include file="assets/scene.xml"/>
         <include file="summit_xl_description/assets/summit_xls.urdf.xml"/>
+        <!-- Cameras are defined inside cargo_box in summit_xls.urdf.xml (box_cam1, box_cam2) -->
     </worldbody>
 
     <include file="summit_xl_description/assets/summit_xls_actuator.xml"/>

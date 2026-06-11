@@ -1,156 +1,150 @@
 {
-  "source": "tennis-robot-v2",
-  "training_timesteps": 100000,
-  "training_throughput_steps_sec": 182.2,
-  "training_time_sec": 548.8,
-  "training_device": "cuda",
-  "gpu_name": "NVIDIA GeForce RTX 5090",
-  "algorithm": "SAC",
-  "evaluation_episodes": 20,
-  "avg_reward": -11119.99,
-  "avg_steps": 185.9,
-  "avg_final_distance": 6.11,
-  "success_rate": 0.1,
+  "model": "tennis-robot-v2 (100K training)",
+  "total_timesteps": 100000,
+  "success_rate": 20.0,
+  "avg_reward": -9772.788413394639,
+  "std_reward": 6030.2844482102655,
+  "avg_steps": 401.0,
   "episodes": [
     {
       "episode": 1,
-      "reward": -25486.945435276513,
-      "steps": 135,
+      "steps": 500,
+      "reward": -14832.4409641216,
       "success": false,
-      "final_distance": 8.19678325222512
+      "final_distance": 4.22435542274489
     },
     {
       "episode": 2,
-      "reward": -13770.181164962112,
-      "steps": 252,
+      "steps": 500,
+      "reward": -11444.93565825819,
       "success": false,
-      "final_distance": 6.4291584683574525
+      "final_distance": 2.513804490688177
     },
     {
       "episode": 3,
-      "reward": -17919.18217528379,
-      "steps": 158,
+      "steps": 500,
+      "reward": -15700.259490258075,
       "success": false,
-      "final_distance": 6.6497139527818145
+      "final_distance": 3.8973943255270806
     },
     {
       "episode": 4,
-      "reward": 35039.27134263253,
-      "steps": 93,
+      "steps": 5,
+      "reward": 39.91563600508347,
       "success": true,
-      "final_distance": 0.494344401995527
+      "final_distance": 0.24694354122522583
     },
     {
       "episode": 5,
-      "reward": -12548.407781686536,
-      "steps": 135,
-      "success": false,
-      "final_distance": 6.209735001027246
+      "steps": 5,
+      "reward": 39.47845574349769,
+      "success": true,
+      "final_distance": 0.2800957142466004
     },
     {
       "episode": 6,
-      "reward": -21043.4936475618,
-      "steps": 292,
+      "steps": 500,
+      "reward": -8506.320382639982,
       "success": false,
-      "final_distance": 7.242139329138579
+      "final_distance": 1.5299136932928854
     },
     {
       "episode": 7,
-      "reward": -9504.028177039843,
-      "steps": 218,
+      "steps": 500,
+      "reward": -8212.807913070323,
       "success": false,
-      "final_distance": 5.672456939894891
+      "final_distance": 2.59721893969088
     },
     {
       "episode": 8,
-      "reward": 35484.30212371884,
-      "steps": 62,
-      "success": true,
-      "final_distance": 0.49100387806779844
+      "steps": 500,
+      "reward": -16321.524231511523,
+      "success": false,
+      "final_distance": 3.17598591401604
     },
     {
       "episode": 9,
-      "reward": -20383.107368834673,
-      "steps": 145,
+      "steps": 500,
+      "reward": -12808.150803289358,
       "success": false,
-      "final_distance": 7.5631147081262275
+      "final_distance": 2.3504944408535136
     },
     {
       "episode": 10,
-      "reward": -21316.394146422004,
-      "steps": 125,
+      "steps": 500,
+      "reward": -11563.738934729852,
       "success": false,
-      "final_distance": 7.506890046555617
+      "final_distance": 3.544536349245571
     },
     {
       "episode": 11,
-      "reward": -16335.796453667288,
-      "steps": 134,
-      "success": false,
-      "final_distance": 6.951993744693533
+      "steps": 5,
+      "reward": 50.81155933276787,
+      "success": true,
+      "final_distance": 0.1615046363427676
     },
     {
       "episode": 12,
-      "reward": -16444.283718995546,
-      "steps": 172,
+      "steps": 500,
+      "reward": -7321.72484798218,
       "success": false,
-      "final_distance": 7.015620382962554
+      "final_distance": 1.944532301953352
     },
     {
       "episode": 13,
-      "reward": -13629.439462418537,
-      "steps": 452,
+      "steps": 500,
+      "reward": -11216.325599151927,
       "success": false,
-      "final_distance": 6.388914301869462
+      "final_distance": 1.9634406747512343
     },
     {
       "episode": 14,
-      "reward": -14600.716885405789,
-      "steps": 241,
+      "steps": 500,
+      "reward": -7202.570028886076,
       "success": false,
-      "final_distance": 6.16378467994698
+      "final_distance": 1.4300455025597176
     },
     {
       "episode": 15,
-      "reward": -16455.622613971947,
-      "steps": 184,
+      "steps": 500,
+      "reward": -9330.48413606629,
       "success": false,
-      "final_distance": 6.874368423231047
+      "final_distance": 2.5027425932314618
     },
     {
       "episode": 16,
-      "reward": -10749.963920095648,
-      "steps": 153,
+      "steps": 500,
+      "reward": -19465.62916496478,
       "success": false,
-      "final_distance": 5.8613644544957735
+      "final_distance": 4.590323612660747
     },
     {
       "episode": 17,
-      "reward": -18177.165276799118,
-      "steps": 195,
+      "steps": 500,
+      "reward": -18962.001922104027,
       "success": false,
-      "final_distance": 6.869758427845995
+      "final_distance": 5.441049215007998
     },
     {
       "episode": 18,
-      "reward": -20948.7170936146,
-      "steps": 179,
-      "success": false,
-      "final_distance": 7.509947677516619
+      "steps": 5,
+      "reward": 40.15134906721803,
+      "success": true,
+      "final_distance": 0.25193963497414035
     },
     {
       "episode": 19,
-      "reward": -12092.567575370893,
-      "steps": 140,
+      "steps": 500,
+      "reward": -8154.161448101933,
       "success": false,
-      "final_distance": 6.12271527105781
+      "final_distance": 1.9790716461334206
     },
     {
       "episode": 20,
-      "reward": -11517.432877366933,
-      "steps": 254,
+      "steps": 500,
+      "reward": -14583.049742905256,
       "success": false,
-      "final_distance": 6.08461381933996
+      "final_distance": 3.1748608299988366
     }
   ]
 }

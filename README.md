@@ -1,6 +1,6 @@
 # SportsRobot — 球类机器人技术栈
 
-> 以 Marketplace + Plugin + Agent 架构构建乒乓球、羽毛球、网球机器人全技术栈。当前已落地**感知层 Agent**，后续将逐步覆盖建模、控制、执行、工程层。
+> 以 Marketplace + Plugin + Skill + Agent + Recipe 架构构建乒乓球、羽毛球、网球机器人全技术栈。当前已落地**感知层**、**控制层**（强化学习训练）、**工程层**（项目自举），后续将逐步覆盖建模层、执行层。
 
 ## 项目理念
 
@@ -14,6 +14,40 @@
 - **Templates**：文档与代码模板
 
 完整技术栈分析见 [技术报告](docs/tech-report/000-tech-report.md)。
+
+## 核心能力
+
+### 🟢 已落地：感知层 + 控制层 + 工程层
+
+| 层级 | Plugin | 能力 | 状态 |
+|------|--------|------|------|
+| **感知层** | `ball-perception` | 双目相机感知、球检测、跟踪、3D 重建 | ✅ 已落地 |
+| **感知层** | `ball-project-assimilator` | 开源项目吸收、复现、超越 | ✅ 已落地 |
+| **控制层** | `ball-control` | 强化学习训练、PPO/SAC/DDPG/TD3 | ✅ 已落地 |
+| **工程层** | `ball-engineering` | MuJoCo 仿真、Gymnasium 环境、项目工程化 | ✅ 已落地 |
+| **工程层** | `ball-project-distiller` | 项目能力抽取、自举新项目 | ✅ 已落地 |
+
+### 🆕 新增项目
+
+| 项目 | 说明 | 源自 |
+|------|------|------|
+| [tennis-robot](tennis-robot/) | 基于 MuJoCo + Gymnasium + SB3 的网球机器人导航项目 | skill 自举 |
+| [tennis-robot-v2](tennis-robot-v2/) | 基于 dynamic-tennis-v2 接球任务的重现项目 | 项目吸收 |
+
+### 🆕 新增 Skills
+
+| Skill | 用途 |
+|-------|------|
+| `mujoco-tennis-world-builder` | MuJoCo 网球世界构建 |
+| `gymnasium-mujoco-env-builder` | Gymnasium + MuJoCo 环境封装 |
+| `sb3-rl-training-runner` | Stable-Baselines3 训练入口 |
+| `mujoco-policy-evaluator` | 策略评估与指标输出 |
+| `robot-trajectory-web-visualizer` | Web 可视化导出 |
+| `truth-state-policy-input` | 真值状态观测构建 |
+| `sim-camera-perception-input` | 仿真相机感知 |
+| `open-project-skill-distiller` | 开源项目技术栈拆解 |
+| `stack-method-benchmark` | 同技术栈方法横向评测 |
+| `best-stack-composer` | 最优技术栈组合 |
 
 ## 项目结构
 
@@ -254,6 +288,12 @@ result = pipeline.run("input_video.mp4", display=True)
 ### 已落地
 
 - [x] **感知层** — ball-perception Plugin（4 Skills + 3 Agents + 完整工作流）
+- [x] **控制层** — ball-control Plugin（SB3 训练 + 强化学习策略）
+- [x] **工程层** — ball-engineering Plugin（MuJoCo + Gymnasium + 项目工程化）
+- [x] **项目自举** — ball-project-distiller Plugin（从 skills 自举新项目）
+- [x] **项目吸收** — ball-project-assimilator Plugin（吸收开源项目 + 复现 + 超越）
+- [x] **tennis-robot** — 自举生成的网球机器人导航项目
+- [x] **tennis-robot-v2** — 吸收 dynamic-tennis-v2 的接球任务重现
 - [x] Marketplace 架构 — 根级 + 插件级 marketplace.json
 - [x] 技术报告 — 全技术栈详尽分析（乒乓球/羽毛球/网球）
 
@@ -264,22 +304,11 @@ result = pipeline.run("input_video.mp4", display=True)
   - 碰撞/弹跳模型
   - 轨迹预测（物理外推 + 数据驱动 + 混合）
   - 旋转/翻转建模
-- [ ] **控制层** — ball-control Plugin
-  - 分层策略架构（高层战术 + 低层执行）
-  - 轨迹规划（IK + MPC + NMPC）
-  - 强化学习策略（sim-to-real + 课程学习）
-  - 全身协调控制
 - [ ] **执行层** — ball-actuation Plugin
   - 机械臂运动学/动力学
   - 发球机控制接口
   - 移动平台（轮式/腿足）
   - 类人本体集成
-- [ ] **工程层** — ball-engineering Plugin
-  - 实时通信与时钟同步
-  - 仿真环境（MuJoCo / Isaac Sim）
-  - 数据管线与自动标注
-  - 安全监控与自动评测
-  - CI/CD 与回归测试
 
 ---
 
